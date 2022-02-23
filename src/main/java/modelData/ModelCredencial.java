@@ -4,7 +4,9 @@
  */
 package modelData;
 
+import java.util.HashMap;
 import java.util.Map;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 /**
@@ -22,8 +24,11 @@ public class ModelCredencial {
     }
     
     public ModelCredencial(JSONObject c){
-        this.titulo = titulo;
-        this.credenciales = credenciales;
+        this.titulo = (String)c.get("titulo");
+        this.credenciales = new HashMap<>();
+        JSONArray tempList = (JSONArray) c.get("credenciales");
+        this.credenciales = ((JSONObject)tempList.get(0));
+        System.out.println(credenciales);
     }
 
     public String getTitulo() {

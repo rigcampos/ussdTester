@@ -37,7 +37,7 @@ public class ActionBtn extends MouseAdapter{
                 }
                 ViewManager.getInstance().minimizarMainW();
                 
-                Manager.getInstance(1).start();
+                Manager.getInstance(ViewManager.getInstance().getMenuSelected().getText()).start();
                 
             }
             default ->{

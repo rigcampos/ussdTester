@@ -13,6 +13,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -37,13 +38,13 @@ public class StartDocument {
     public Map<String, String> flujoUssd;
     private JSONParser jsonParser;
     private ArrayList<CP> cpList;
-    private ArrayList<ModelCredencial> credencialesPojo;
+    private Map<String,ModelCredencial> credencialesPojo;
     
     public StartDocument() {
         flujos = new LinkedHashMap<String, TreeMap>();
         credenciales = new LinkedHashMap<String, ArrayList<String>>();
         flujoUssd = new LinkedHashMap<String, String>();
-        credencialesPojo = new ArrayList<ModelCredencial>();
+        credencialesPojo = new HashMap<String,ModelCredencial>();
         jsonParser = new JSONParser();
         cpList = new ArrayList<CP>(); 
     }
@@ -141,8 +142,9 @@ public class StartDocument {
                 JSONObject cp = (JSONObject) jo.get(TestConstants.CP_NAME);
                 cpList.add(new CP(cp));
             }case TestConstants.JSON_NAME_CREDENCIALES ->{
+                System.out.println(jo);
                 JSONObject credenciales = (JSONObject) jo.get(TestConstants.FLUJO_NAME);
-                credencialesPojo.add(new ModelCredencial(credenciales));
+                credencialesPojo.put((String)credenciales.get("titulo"),new ModelCredencial(credenciales));
             }
         }
         
@@ -160,7 +162,7 @@ public class StartDocument {
         return cpList;
     }
 
-    public ArrayList<ModelCredencial> getCredencialesPojo() {
+    public Map<String,ModelCredencial> getCredencialesPojo() {
         return credencialesPojo;
     }
     

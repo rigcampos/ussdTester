@@ -103,22 +103,22 @@ public class ViewManager{
     public void showUSSDCredencial(String key){
         
         showMainTitle("Credenciales USSD");
-//        int cant_x = 0, cant_y = 0;
-//        for(String st :Manager.getInstance().getCredencialesMap().get(ProgramConstants.STARTTITLE+key)){
-//            Credencial cr = new Credencial(st);
-//            mainPanel.add(cr.getInputKey());
-//            mainPanel.add(cr.getInputVal());
-//            cr.internalBounds(ProgramConstants.BTNSTARTX + (ProgramConstants.CREDENWIDTH * cant_x)
-//                    + (ProgramConstants.BTNSPACE * cant_x), 
-//                    (ProgramConstants.BTNSTARTY + (ProgramConstants.CREDENHEIGHT * cant_y*2) + 
-//                            (ProgramConstants.CREDENEXTERSEPA * cant_y)),
-//                    ProgramConstants.CREDENWIDTH, ProgramConstants.CREDENHEIGHT);
-//
-//            cant_y = cant_y+1;
-//            credenciales.add(cr);
-//            cant_x = cant_y == ProgramConstants.BTNPERY ? cant_x + 1 : cant_x;
-//            cant_y = cant_y == ProgramConstants.BTNPERY ? 0 : cant_y;
-//        }
+        int cant_x = 0, cant_y = 0;
+        for(String st : Manager.getInstance().getCredencialesPojo().get("Flujo USSD").getCredenciales().keySet()){
+            Credencial cr = new Credencial(st);
+            mainPanel.add(cr.getInputKey());
+            mainPanel.add(cr.getInputVal());
+            cr.internalBounds(ProgramConstants.BTNSTARTX + (ProgramConstants.CREDENWIDTH * cant_x)
+                    + (ProgramConstants.BTNSPACE * cant_x), 
+                    (ProgramConstants.BTNSTARTY + (ProgramConstants.CREDENHEIGHT * cant_y*2) + 
+                            (ProgramConstants.CREDENEXTERSEPA * cant_y)),
+                    ProgramConstants.CREDENWIDTH, ProgramConstants.CREDENHEIGHT);
+
+            cant_y = cant_y+1;
+            credenciales.add(cr);
+            cant_x = cant_y == ProgramConstants.BTNPERY ? cant_x + 1 : cant_x;
+            cant_y = cant_y == ProgramConstants.BTNPERY ? 0 : cant_y;
+        }
         mainPanel.validate();
         mainPanel.repaint();
         mainPanel.setVisible(true);

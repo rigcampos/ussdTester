@@ -38,6 +38,7 @@ public class MenuAction extends MouseAdapter{
                 ViewManager.getInstance().showUSSDCredencial(menu);
                 ViewManager.getInstance().getMenuSelected().setBackground(ProgramConstants.BTNCOLORMENUDE);
                 ViewManager.getInstance().setMenuSelected((JLabel)e.getComponent());
+                ViewManager.getInstance().showBtnContinuar();
             }
             default ->{
                 System.out.println("Boton no asignado aun D:");

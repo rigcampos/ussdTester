@@ -4,6 +4,7 @@
  */
 package automatizacionweb;
 
+import DocumentCrud.InExcelDocument;
 import DocumentCrud.InWordDocument;
 import DocumentCrud.StartDocument;
 import com.tigosv.ussdtester.test.BaseClass;
@@ -43,8 +44,8 @@ public class Manager extends Thread{
     private ArrayList<String> imagenes;
     private String startDate;
     private ArrayList<CP> cpList;
-    private ArrayList<ModelCredencial> credencialesPojo;
-    private static int instanceCamino = 0;
+    private Map<String,ModelCredencial> credencialesPojo;
+    private static String instanceCamino = "";
 
     private Manager() {
         st= new StartDocument();
@@ -62,12 +63,11 @@ public class Manager extends Thread{
         return instance;
     }
     
-    public static synchronized Manager getInstance(int camino) {
+    public static synchronized Manager getInstance(String camino) {
         instanceCamino = camino;
         if (instance == null) {
             instance = new Manager();
         }
-
         return instance;
     }
     
@@ -90,10 +90,10 @@ public class Manager extends Thread{
     @Override
     public void run() {
         switch(instanceCamino){
-            case 1 ->{
+            case ProgramConstants.MENURECURSIVA ->{
                 startFlujo();
             }
-            case 2 ->{
+            case ProgramConstants.MENUUSSD ->{
                 processUSSD();
             }
         }
@@ -137,7 +137,7 @@ public class Manager extends Thread{
     }
     
     public void processUSSD(){   
-        st.flujoUssd.forEach((k,v)->{
+//        st.flujoUssd.forEach((k,v)->{
 //            BaseClass.getInstance().beforeTest();
 //            String call = k;
 //            String[] way = v.split(ProgramConstants.SEPARATORUSSD);
@@ -150,13 +150,14 @@ public class Manager extends Thread{
 //            }finally{
 //                
 //            }
-        });
+//        });
         crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
         validacionesExternas();
     }
     
     public void validacionesExternas(){
-        
+        InExcelDocument ie = new InExcelDocument();
+        ie.createExcelDocument();
         runFlujoWebUssd();
         crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
         SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
@@ -201,7 +202,7 @@ public class Manager extends Thread{
         return this.saveVals;
     }
 
-    public ArrayList<ModelCredencial> getCredencialesPojo() {
+    public Map<String,ModelCredencial> getCredencialesPojo() {
         return credencialesPojo;
     }
     

@@ -47,7 +47,7 @@ public final class ProgramConstants {
     public static final String STARTTITLE = "##";
     public static final String STARTSEPARATOR = " -- ";
     public static final String STARTFILE = "resources/documento de inicio.txt";
-    public static final String XLSXNAME = "resources/Automatizacion_Web.xlsx";
+    public static final String XLSXNAME = "resources/Automatizacion_Web";
     public static final String XLSXEXT = ".xlsx";
     public static final String XLSXSHEETNAME = "Automatizacion_Web";
     public static final String DOCGENERALFILE = "resources/documentation/plantillas/Plantilla general automatizacion.docx";
