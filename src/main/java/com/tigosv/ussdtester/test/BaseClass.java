@@ -146,7 +146,7 @@ public class BaseClass {
             driver.findElement(By.id(TestConstants.TEST_BTNOK)).click();
             Thread.sleep(2000L);      
         }
-        Thread.sleep(2000L);
+        Thread.sleep(12000L);
         tomarScreenShot(fin+ProgramConstants.DOCIMAGENAME);
         driver.findElement(By.id(TestConstants.TEST_BTNOK)).click();
     }

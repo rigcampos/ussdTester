@@ -157,7 +157,7 @@ public class Manager extends Thread{
         System.out.println("ENTRAMOS A LAS VALIDACIONES DE AFUERA!!!!!!!!!");
         runFlujoWebUssd();
         crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
-        SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79016342");
+        SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
     }
     
     public void readJson(){

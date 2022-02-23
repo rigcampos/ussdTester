@@ -58,7 +58,9 @@ public final class ProgramConstants {
     public static final String KEYPASS = "Password";
     public static final String KEYFECHA = "Fecha de expiracion";
     public static final String KEYCVV = "cvv de la tarjeta";
-    public static final java.awt.Color BTNCOLORCELESTE = new java.awt.Color(0, 200, 255);
+    public static final java.awt.Color BTNCOLORCELESTE = new java.awt.Color(0, 200, 255);//[0,55,123]
+    public static final java.awt.Color BTNCOLORMENUSE = new java.awt.Color(0, 55, 123);
+    public static final java.awt.Color BTNCOLORMENUDE = new java.awt.Color(0, 25, 80);
     public static final java.awt.Font BTNFONT = new java.awt.Font("SansSerif", 0, 16);
     public static final java.awt.Color BTNCOLORBLANCO = new java.awt.Color(255, 255, 255);
     public static final javax.swing.border.LineBorder BTNBORDER = new javax.swing.border.LineBorder(BTNCOLORBLANCO, 2, true);
@@ -81,4 +83,6 @@ public final class ProgramConstants {
     public static final String SEPARATORUSSD = ",";
     public static final String USSDIMAGEPATH = "resources/documentation/ussd image/";
     public static final String USSDNAME = "soapxml.xml";
+    public static final String MENURECURSIVA = "Recursivas";
+    public static final String MENUUSSD = "USSD";
 }

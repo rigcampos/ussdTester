@@ -28,6 +28,9 @@ public class MainWindow extends javax.swing.JFrame {
         setBounds(0, 0, sc.width, sc.height);
         setExtendedState(MAXIMIZED_BOTH);
         setVisible(true);
+        mRecursivas.addMouseListener(new MenuAction(mRecursivas.getText()));
+        mUSSD.addMouseListener(new MenuAction(mUSSD.getText()));
+        //ViewManager.getInstance().setMenuSelected(mRecursivas);
         //setResizable(false);
         //setExtendedState(ICONIFIED); //31797833
     }
@@ -60,27 +63,17 @@ public class MainWindow extends javax.swing.JFrame {
         mRecursivas.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
         mRecursivas.setForeground(new java.awt.Color(255, 255, 255));
         mRecursivas.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        mRecursivas.setText("Recursivas");
+        mRecursivas.setText(ProgramConstants.MENURECURSIVA);
         mRecursivas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mRecursivas.setOpaque(true);
-        mRecursivas.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mRecursivasMouseClicked(evt);
-            }
-        });
 
-        mUSSD.setBackground(new java.awt.Color(0, 55, 123));
+        mUSSD.setBackground(new java.awt.Color(0, 25, 80));
         mUSSD.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
         mUSSD.setForeground(new java.awt.Color(255, 255, 255));
         mUSSD.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        mUSSD.setText("USSD");
+        mUSSD.setText(ProgramConstants.MENUUSSD);
         mUSSD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mUSSD.setOpaque(true);
-        mUSSD.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mUSSDMouseClicked(evt);
-            }
-        });
 
         javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
         mainMenu.setLayout(mainMenuLayout);
@@ -132,18 +125,6 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void mRecursivasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mRecursivasMouseClicked
-        // TODO add your handling code here:
-        
-        //dispose();
-    }//GEN-LAST:event_mRecursivasMouseClicked
-
-    private void mUSSDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mUSSDMouseClicked
-        // TODO add your handling code here:
-        System.out.println("click en el menu 2");
-        Manager.getInstance(2).start();
-    }//GEN-LAST:event_mUSSDMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -189,6 +170,10 @@ public class MainWindow extends javax.swing.JFrame {
     
     public javax.swing.JPanel getMainPanel(){
         return this.mainPanel;
+    }
+    
+    public javax.swing.JLabel getMRecursivas(){
+        return this.mRecursivas;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -18,13 +19,14 @@ import javax.swing.JPanel;
  *
  * @author rigcampos
  */
-public class ViewManager extends Thread{
+public class ViewManager{
     
     private MainWindow mw;
     private JPanel mainPanel;
     private JPanel mainMenu;
     private static ViewManager instance;
     private ArrayList<Credencial> credenciales;
+    private JLabel menuSelected;
 
     private ViewManager() {
         
@@ -32,6 +34,7 @@ public class ViewManager extends Thread{
         mw =  new MainWindow();
         mainPanel = mw.getMainPanel();
         credenciales = new ArrayList<Credencial>();
+        menuSelected = mw.getMRecursivas();
     }
     
     public synchronized static ViewManager getInstance(){
@@ -49,6 +52,7 @@ public class ViewManager extends Thread{
     }
     
     public void showBtnFlujos(){
+        
         showMainTitle("Pruebas recursivas");
         int cant_x = 0, cant_y = 0;
         for(Map.Entry<String, TreeMap> entry : Manager.getInstance().getMasterMap().entrySet()){
@@ -95,6 +99,30 @@ public class ViewManager extends Thread{
         mainPanel.setVisible(true);
     }
     
+    public void showUSSDCredencial(String key){
+        
+        showMainTitle("Credenciales USSD");
+//        int cant_x = 0, cant_y = 0;
+//        for(String st :Manager.getInstance().getCredencialesMap().get(ProgramConstants.STARTTITLE+key)){
+//            Credencial cr = new Credencial(st);
+//            mainPanel.add(cr.getInputKey());
+//            mainPanel.add(cr.getInputVal());
+//            cr.internalBounds(ProgramConstants.BTNSTARTX + (ProgramConstants.CREDENWIDTH * cant_x)
+//                    + (ProgramConstants.BTNSPACE * cant_x), 
+//                    (ProgramConstants.BTNSTARTY + (ProgramConstants.CREDENHEIGHT * cant_y*2) + 
+//                            (ProgramConstants.CREDENEXTERSEPA * cant_y)),
+//                    ProgramConstants.CREDENWIDTH, ProgramConstants.CREDENHEIGHT);
+//
+//            cant_y = cant_y+1;
+//            credenciales.add(cr);
+//            cant_x = cant_y == ProgramConstants.BTNPERY ? cant_x + 1 : cant_x;
+//            cant_y = cant_y == ProgramConstants.BTNPERY ? 0 : cant_y;
+//        }
+        mainPanel.validate();
+        mainPanel.repaint();
+        mainPanel.setVisible(true);
+    }
+    
     public void showBtnContinuar(){
         JbuttonProgram btn = new JbuttonProgram(ProgramConstants.BTNCONTINUAR);
             btn.generalFormat();
@@ -124,5 +152,14 @@ public class ViewManager extends Thread{
     
     public ArrayList<Credencial> getCredenciales(){
         return this.credenciales;
-    }   
+    }
+
+    public JLabel getMenuSelected() {
+        return menuSelected;
+    }
+
+    public void setMenuSelected(JLabel menuSelected) {
+        this.menuSelected = menuSelected;
+    }
+    
 }
