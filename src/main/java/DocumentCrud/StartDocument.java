@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import modelData.CP;
+import modelData.ModelCredencial;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -36,11 +37,15 @@ public class StartDocument {
     public Map<String, String> flujoUssd;
     private JSONParser jsonParser;
     private ArrayList<CP> cpList;
+    private ArrayList<ModelCredencial> credencialesPojo;
     
     public StartDocument() {
         flujos = new LinkedHashMap<String, TreeMap>();
         credenciales = new LinkedHashMap<String, ArrayList<String>>();
         flujoUssd = new LinkedHashMap<String, String>();
+        credencialesPojo = new ArrayList<ModelCredencial>();
+        jsonParser = new JSONParser();
+        cpList = new ArrayList<CP>(); 
     }
     
     public void readStartDocument(){
@@ -116,25 +121,28 @@ public class StartDocument {
     
     public void readJson(String nombreArchivo){
          
-        try (FileReader reader = new FileReader(nombreArchivo)){//TestConstants.EXCEL_NAME_USSD
+        try (FileReader reader = new FileReader(nombreArchivo)){//TestConstants.JSON_NAME_USSD
             
             Object obj = jsonParser.parse(reader);
             JSONArray tempList = (JSONArray) obj;
-            tempList.forEach( test -> parseCPObject( (JSONObject) test, nombreArchivo ) );
+            for(int i = 0; i< tempList.size(); i++){
+                parseObject( (JSONObject) tempList.get(i), nombreArchivo);
+            }
+            //tempList.forEach( test -> parseObject( (JSONObject) test, nombreArchivo ) );
  
         }catch (ParseException | IOException e) {
             e.printStackTrace();
         }
     }
     
-    private void parseCPObject(JSONObject jo, String name){
+    private void parseObject(JSONObject jo, String name){
         switch(name){
-            case TestConstants.EXCEL_NAME_USSD ->{
+            case TestConstants.JSON_NAME_USSD ->{
                 JSONObject cp = (JSONObject) jo.get(TestConstants.CP_NAME);
                 cpList.add(new CP(cp));
-            }case "y" ->{
-                JSONObject cp = (JSONObject) jo.get(TestConstants.CP_NAME);
-                cpList.add(new CP(cp));
+            }case TestConstants.JSON_NAME_CREDENCIALES ->{
+                JSONObject credenciales = (JSONObject) jo.get(TestConstants.FLUJO_NAME);
+                credencialesPojo.add(new ModelCredencial(credenciales));
             }
         }
         
@@ -146,6 +154,14 @@ public class StartDocument {
     
     public Map<String, ArrayList<String>> getCredenciales(){
         return this.credenciales;
+    }
+    
+    public ArrayList<CP> getCpList(){
+        return cpList;
+    }
+
+    public ArrayList<ModelCredencial> getCredencialesPojo() {
+        return credencialesPojo;
     }
     
 }

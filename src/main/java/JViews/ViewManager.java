@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import modelData.ModelCredencial;
 
 /**
  *
@@ -53,7 +54,7 @@ public class ViewManager{
     
     public void showBtnFlujos(){
         
-        showMainTitle("Pruebas recursivas");
+        showMainTitle("Pruebas regresivas");
         int cant_x = 0, cant_y = 0;
         for(Map.Entry<String, TreeMap> entry : Manager.getInstance().getMasterMap().entrySet()){
             JbuttonProgram btn = new JbuttonProgram(entry.getKey().split(ProgramConstants.STARTTITLE)[1]);

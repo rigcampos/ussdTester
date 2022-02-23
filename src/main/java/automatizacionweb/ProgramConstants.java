@@ -83,6 +83,6 @@ public final class ProgramConstants {
     public static final String SEPARATORUSSD = ",";
     public static final String USSDIMAGEPATH = "resources/documentation/ussd image/";
     public static final String USSDNAME = "soapxml.xml";
-    public static final String MENURECURSIVA = "Recursivas";
+    public static final String MENURECURSIVA = "Regresivas";
     public static final String MENUUSSD = "USSD";
 }

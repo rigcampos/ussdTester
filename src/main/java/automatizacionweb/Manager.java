@@ -21,6 +21,7 @@ import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import modelData.CP;
+import modelData.ModelCredencial;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -41,8 +42,8 @@ public class Manager extends Thread{
     private RegresivaWeb rw;
     private ArrayList<String> imagenes;
     private String startDate;
-    private JSONParser jsonParser;
     private ArrayList<CP> cpList;
+    private ArrayList<ModelCredencial> credencialesPojo;
     private static int instanceCamino = 0;
 
     private Manager() {
@@ -51,8 +52,6 @@ public class Manager extends Thread{
         userVals = new HashMap<String, String>();
         saveVals = new HashMap<String, String>();
         startDate = getNowDate();
-        jsonParser = new JSONParser();
-        cpList = new ArrayList<CP>();
     }
 
     public static synchronized Manager getInstance() {
@@ -78,7 +77,10 @@ public class Manager extends Thread{
         st.readCredencialDoc();
         credencialesMap = st.getCredenciales();
         st.readFlujoExcel();
-        readJson();
+        st.readJson(TestConstants.JSON_NAME_USSD);
+        st.readJson(TestConstants.JSON_NAME_CREDENCIALES);
+        cpList = st.getCpList();
+        credencialesPojo = st.getCredencialesPojo();
     }
     
     public void readExcelDocument(){
@@ -154,29 +156,10 @@ public class Manager extends Thread{
     }
     
     public void validacionesExternas(){
-        System.out.println("ENTRAMOS A LAS VALIDACIONES DE AFUERA!!!!!!!!!");
+        
         runFlujoWebUssd();
         crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
         SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
-    }
-    
-    public void readJson(){
-         
-        try (FileReader reader = new FileReader(TestConstants.EXCEL_NAME_USSD)){
-            
-            Object obj = jsonParser.parse(reader);
-            JSONArray tempList = (JSONArray) obj;
-            tempList.forEach( test -> parseCPObject( (JSONObject) test ) );
- 
-        }catch (ParseException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-    
-    private void parseCPObject(JSONObject jo){
-        
-        JSONObject cp = (JSONObject) jo.get(TestConstants.CP_NAME);
-        cpList.add(new CP(cp));
     }
     
     private void runFlujoWebUssd(){
@@ -217,4 +200,9 @@ public class Manager extends Thread{
     public Map<String, String> getSaveVals(){
         return this.saveVals;
     }
+
+    public ArrayList<ModelCredencial> getCredencialesPojo() {
+        return credencialesPojo;
+    }
+    
 }
