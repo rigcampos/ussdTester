@@ -168,7 +168,13 @@ public class Manager extends Thread{
         cpList.forEach((cpTemp)->{
             rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
             cpTemp.getPasos().forEach((pasosTemp)->{
-                rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), pasosTemp.getInput());
+                
+                if(userVals.containsKey(pasosTemp.getInput())){
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), userVals.get(pasosTemp.getInput()));
+                }else{
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), pasosTemp.getInput());
+                }
+                
             });
         });
     }

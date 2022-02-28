@@ -34,6 +34,8 @@ public class ActionBtn extends MouseAdapter{
                 for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
                     Manager.getInstance().getUserVals().put(credencial.getKeyText()
                             , credencial.getValText());
+                    //System.out.println(credencial.getKeyText());
+                    //System.out.println(credencial.getValText());
                 }
                 ViewManager.getInstance().minimizarMainW();
                 
