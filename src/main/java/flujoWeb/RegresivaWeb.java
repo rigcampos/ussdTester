@@ -226,6 +226,32 @@ public class RegresivaWeb {
                 }case ProgramConstants.ACTIONRUNCLICK ->{
                     JavascriptExecutor js = (JavascriptExecutor) driver; 
                     js.executeScript("arguments[0].click();",element);
+                }case ProgramConstants.ACTIONPRUEBA->{
+                    //moveToElement(element);
+                    ((JavascriptExecutor) driver).
+                            executeScript("var oTable = document.getElementById('frmBody:tabView:dtbAditionalService_data');\n" +
+"\n" +
+"    //gets rows of table\n" +
+"    var rowLength = oTable.rows.length;\n" +
+"\n" +
+"    //loops through rows    \n" +
+"    for (i = 0; i < rowLength; i++){\n" +
+"\n" +
+"      //gets cells of current row  \n" +
+"       var oCells = oTable.rows.item(i).cells;\n" +
+"\n" +
+"       //gets amount of cells of current row\n" +
+"       var cellLength = oCells.length;\n" +
+"\n" +
+"       //loops through each cell in current row\n" +
+"       for(var j = 0; j < cellLength; j++){\n" +
+"\n" +
+"              // get your cell info here\n" +
+"\n" +
+"              var cellVal = oCells.item(j).textContent;\n" +
+"              alert(cellVal);\n" +
+"           }\n" +
+"    }", element);
                 }
             }
             return true;

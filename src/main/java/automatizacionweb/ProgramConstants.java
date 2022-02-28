@@ -43,6 +43,7 @@ public final class ProgramConstants {
     public static final String ACTIONDROPDOWN = "20";
     public static final String ACTIONOPENNEW = "21";
     public static final String ACTIONRUNCLICK = "22";
+    public static final String ACTIONPRUEBA = "23";
     public static final String LABELCODIGO = "Codigo de confirmacion";
     public static final String STARTTITLE = "##";
     public static final String STARTSEPARATOR = " -- ";
