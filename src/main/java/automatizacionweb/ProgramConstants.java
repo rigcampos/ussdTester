@@ -86,4 +86,5 @@ public final class ProgramConstants {
     public static final String USSDNAME = "soapxml.xml";
     public static final String MENURECURSIVA = "Regresivas";
     public static final String MENUUSSD = "USSD";
+    public static final String READTABLE = "var oTable = document.getElementById('frmBody:tabView:dtbAditionalService_data'); var rowLength = oTable.rows.length; var arreglo = []; for (i = 0; i < rowLength; i++){ var oCells = oTable.rows.item(i).cells; var cellLength = oCells.length; for(var j = 0; j < cellLength; j++){ var cellVal = oCells.item(j).textContent; arreglo.push(cellVal); } } return arreglo;";
 }

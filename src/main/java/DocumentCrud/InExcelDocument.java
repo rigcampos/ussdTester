@@ -34,32 +34,32 @@ public class InExcelDocument {
         pagesName = new ArrayList<String>();
     }
     
-    public void createExcelDocument(){
+    public void createExcelDocument(String data, int corte, String excelName, int startRow){
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(ProgramConstants.XLSXSHEETNAME);
         
-        int rowCount = 0;
+        int rowCount = startRow;
+        int cambio = 0;
+        int columnCount = 0;
         
-        Row row = sheet.createRow(++rowCount);
-            int columnCount = 0;
+        data = data.replace("[", "");
+        data = data.replace("]", "");
+        
+        String[] dataList = data.split(",");
+        
+        Row row = sheet.createRow(rowCount);
+        for(int i = 0; i<dataList.length; i++){
+            if((i % corte) == 0){
+                row = sheet.createRow(rowCount);
+                rowCount = rowCount + 1;
+                columnCount = 0;
+            }
             Cell cell = row.createCell(++columnCount);
+            cell.setCellValue(dataList[i]);
             
-        Cell cell2 = row.createCell(++columnCount);
-                cell2.setCellValue("ASZ<XZXXZCDFCXVXCFV XCV XCV DF DZ ZSDF");
-        
-//        for (Map.Entry<String,ArrayList<String>> entry : internalData.entrySet()) {
-//            Row row = sheet.createRow(++rowCount);
-//            int columnCount = 0;
-//            Cell cell = row.createCell(++columnCount);
-//            //System.out.println("Key : " + entry.getKey() + ", Value : " + entry.getValue());
-//            for(String val : entry.getValue()){
-//                Cell cell2 = row.createCell(++columnCount);
-//                cell2.setCellValue(val);
-//            }
-//        }
+        }
          
-        try (FileOutputStream outputStream = new FileOutputStream(ProgramConstants.XLSXNAME + 
-                ProgramConstants.XLSXEXT)) {
+        try (FileOutputStream outputStream = new FileOutputStream(excelName)) {
             workbook.write(outputStream);
         } catch (FileNotFoundException ex) {
             //Logger.getLogger(InWordDocument.class.getName()).log(Level.SEVERE, null, ex);
