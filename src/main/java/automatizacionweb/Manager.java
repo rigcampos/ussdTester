@@ -45,7 +45,7 @@ public class Manager extends Thread{
     private String startDate;
     private ArrayList<CP> cpList;
     private Map<String,ModelCredencial> credencialesPojo;
-    private String tableData;
+    private ArrayList<String> tableData;
     private static String instanceCamino = "";
 
     private Manager() {
@@ -54,6 +54,7 @@ public class Manager extends Thread{
         userVals = new HashMap<String, String>();
         saveVals = new HashMap<String, String>();
         startDate = getNowDate();
+        tableData = new ArrayList<String>();
     }
 
     public static synchronized Manager getInstance() {
@@ -162,7 +163,7 @@ public class Manager extends Thread{
         runFlujoWebUssd();
         crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
         SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
-        ie.createExcelDocument(tableData, 8, "ESTE_ES_EL_EXCEL.xlsx",5);
+        ie.createExcelDocument(tableData, 9, "ESTE_ES_EL_EXCEL.xlsx",1);
     }
     
     private void runFlujoWebUssd(){
@@ -214,8 +215,8 @@ public class Manager extends Thread{
         return credencialesPojo;
     }
     
-    public void setTableData(String td){
-        this.tableData = td;
+    public void updateTableData(String td){
+        this.tableData.add(td);
     }
     
 }

@@ -24,7 +24,31 @@
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
 			{"detalle":"Ir a tabla","llave":"id","valor":"frmBody:tabView:dtbAditionalService:j_idt162","accion":"5","input":""},
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
-			{"detalle":"Verificar prueba","llave":"id","valor":"frmBody:tabView:dtbAditionalService_data","accion":"23","input":"Services name, Subscriber date, End date, description, Total quota, Quota balance, Quota Consumption, Last reset, Priority"}
+			{"detalle":"Verificar prueba","llave":"id","valor":"frmBody:tabView:dtbAditionalService_data","accion":"23","input":"Services name, Subscriber date, End date, description, Total quota, Quota balance, Quota Consumption, Last reset, Priority,"},
+			{"detalle":"Ir a CBS","llave":"","valor":"","accion":"3","input":"https://192.168.128.41:8081/main.action?ssLogin=true&BMEWebToken=93fb7f6b-9950-48ff-98f7-de9d5c706cea87d4f700-3903-47ac-af08-7e27ae953191"},
+			{"detalle":"Click en avanzado","llave":"id","valor":"details-button","accion":"1","input":""},
+			{"detalle":"Confirmar","llave":"id","valor":"proceed-link","accion":"1","input":""},
+			{"detalle":"Escribir username","llave":"id","valor":"username","accion":"2","input":"Usuario de red"},
+			{"detalle":"Escribir pass","llave":"id","valor":"password","accion":"2","input":"Password de red"},
+			{"detalle":"Seleccionar dominio","llave":"id","valor":"loginad","accion":"20","input":"sv.tigo.com"},
+			{"detalle":"Entrar a cbs","llave":"id","valor":"submitBtn","accion":"1","input":""},
+			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
+			{"detalle":"Continuar a cbs","llave":"id","valor":"usm_continue","accion":"1","input":""},
+			{"detalle":"click en menu","llave":"id","valor":"systemMenu","accion":"1","input":""},
+			{"detalle":"click en menu","llave":"id","valor":"s_302","accion":"1","input":""},
+			{"detalle":"click en menu","llave":"id","valor":"s_302004","accion":"1","input":""},
+			{"detalle":"click en menu","llave":"id","valor":"shortcut_302004001","accion":"1","input":""},
+			{"detalle":"cambio frame","llave":"id","valor":"tabPage_302004001_iframe","accion":"18","input":""},
+			{"detalle":"click subcriber","llave":"id","valor":"link_1492085635515_42082","accion":"1","input":""},
+			{"detalle":"Escribir numero","llave":"id","valor":"ownerKey_input_value","accion":"2","input":"72020381"},
+			{"detalle":"Click en buscar","llave":"id","valor":"freeQueryButton","accion":"1","input":""},
+			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
+			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
+			{"detalle":"Verificar prueba","llave":"id","valor":"freeUnitList_body","accion":"23","input":"Opt, No, Free unit instance ID, Type, Initial free units, Available Free Units, Measurement Unit Name, Effective Date, Expiration date, Adjustment Direction, Requested adjustment amount,"},
+			{"detalle":"Abrir archivo XML","llave":"","valor":"","accion":"3","input":"user.dir"},
+			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
+			{"detalle":"Ver subscriber 2","llave":"xpath","valor":"(//*[contains(text(),'C_SUBSCRIBER_INFO_2')])[2]","accion":"5","input":""},
+			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""}
 		]
 	}
 }]

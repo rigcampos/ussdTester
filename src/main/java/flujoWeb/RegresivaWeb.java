@@ -49,6 +49,7 @@ public class RegresivaWeb {
     private Robot r;
     private int num = 0;
     private ArrayList<String> imagenes;
+    private String currentAtr;
 
     public RegresivaWeb() {
         dfactory = new InDriverFactory();     
@@ -117,6 +118,11 @@ public class RegresivaWeb {
         j.executeScript ("arguments[0].scrollIntoView({block: 'center', inline: 'nearest'})", element);
     }
     
+    private String tableScript(String id){
+        String readTd = "var oTable = document.getElementById('"+id+"'); var rowLength = oTable.rows.length; var arreglo = []; for (i = 0; i < rowLength; i++){ var oCells = oTable.rows.item(i).cells; var cellLength = oCells.length; for(var j = 0; j < cellLength; j++){ var cellVal = oCells.item(j).textContent; arreglo.push(cellVal); } } return arreglo;";
+        return readTd;
+    }
+    
     private void quitarBorde(WebElement element){
         JavascriptExecutor j = (JavascriptExecutor)driver;
         j.executeScript ("arguments[0].style.border='0px", element);
@@ -149,7 +155,7 @@ public class RegresivaWeb {
     }
     
     public void waitAction(String act,String key, String atr , String val){
-        
+        currentAtr = atr;
         try {
             WebElement element = findElement(byParameter(key, atr));
             driverWait.until(new Function<WebDriver, Boolean>() {
@@ -228,8 +234,8 @@ public class RegresivaWeb {
                     js.executeScript("arguments[0].click();",element);
                 }case ProgramConstants.ACTIONPRUEBA->{
                     //moveToElement(element);
-                    Manager.getInstance().setTableData(val + ((JavascriptExecutor) driver).
-                        executeScript(ProgramConstants.READTABLE).toString());
+                    Manager.getInstance().updateTableData(val + ((JavascriptExecutor) driver).
+                        executeScript(tableScript(currentAtr)).toString());
                 }
             }
             return true;

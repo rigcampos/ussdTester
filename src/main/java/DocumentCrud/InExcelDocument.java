@@ -34,7 +34,7 @@ public class InExcelDocument {
         pagesName = new ArrayList<String>();
     }
     
-    public void createExcelDocument(String data, int corte, String excelName, int startRow){
+    public void createExcelDocument(ArrayList<String> data, int corte, String excelName, int startRow){
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(ProgramConstants.XLSXSHEETNAME);
         
@@ -42,21 +42,28 @@ public class InExcelDocument {
         int cambio = 0;
         int columnCount = 0;
         
-        data = data.replace("[", "");
-        data = data.replace("]", "");
-        
-        String[] dataList = data.split(",");
-        
-        Row row = sheet.createRow(rowCount);
-        for(int i = 0; i<dataList.length; i++){
-            if((i % corte) == 0){
-                row = sheet.createRow(rowCount);
-                rowCount = rowCount + 1;
-                columnCount = 0;
-            }
-            Cell cell = row.createCell(++columnCount);
-            cell.setCellValue(dataList[i]);
+        for(String d : data){
+            String dataTemp;
             
+            d = d.replace("[", "");
+            d = d.replace("]", "");
+
+            String[] dataList = d.split(",");
+
+            Row row = sheet.createRow(rowCount);
+            for(int i = 0; i<dataList.length; i++){
+                if((i % corte) == 0){
+                    row = sheet.createRow(rowCount);
+                    rowCount = rowCount + 1;
+                    columnCount = 0;
+                }
+                Cell cell = row.createCell(++columnCount);
+                String  val = dataList[i].equals("") ? "-" : dataList[i];
+                cell.setCellValue(val);
+
+            }
+            
+            rowCount = rowCount +3;
         }
          
         try (FileOutputStream outputStream = new FileOutputStream(excelName)) {
