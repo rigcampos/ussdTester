@@ -4,6 +4,7 @@
  */
 package DocumentCrud;
 
+import JViews.ViewManager;
 import automatizacionweb.Manager;
 import automatizacionweb.ProgramConstants;
 import java.io.FileInputStream;
@@ -47,9 +48,11 @@ public class InWordDocument {
             }
             addDate(Manager.getInstance().getNowDate(), document, ProgramConstants.DOCFECHAFIN);
             document.write(out);
+            document.close();
             out.close();
+            
         }catch(IOException s){
-          
+            ViewManager.getInstance().updateErrorMessage("Error en el archivo de word");
         }  
     }
     
@@ -64,6 +67,7 @@ public class InWordDocument {
             addCptitle(st,document);
             addDate(Manager.getInstance().getNowDate(), document, ProgramConstants.DOCFECHAFIN);
             document.write(out);
+            document.close();
             out.close();
         }catch(IOException s){
           

@@ -28,6 +28,7 @@ public class ViewManager{
     private static ViewManager instance;
     private ArrayList<Credencial> credenciales;
     private JLabel menuSelected;
+    private String errorMessage="";
 
     private ViewManager() {
         
@@ -139,6 +140,14 @@ public class ViewManager{
         return value;
     }
     
+    public void infoBox(String mensaje){
+        JOptionPane.showMessageDialog(null, mensaje, "Info Box",JOptionPane.INFORMATION_MESSAGE);
+    }
+    
+    public void errorBox(){
+        JOptionPane.showMessageDialog(null, errorMessage, "Error Box",JOptionPane.ERROR_MESSAGE);
+    }
+    
     public void minimizarMainW(){
         mw.setExtendedState(JFrame.ICONIFIED);
     }
@@ -163,4 +172,12 @@ public class ViewManager{
         this.menuSelected = menuSelected;
     }
     
-}
+    public void updateErrorMessage(String m){
+        this.errorMessage = errorMessage + " - " + m; 
+    }
+    
+    public String getErrorMessage(){
+        return this.errorMessage;
+    }
+    
+} 

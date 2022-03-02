@@ -7,26 +7,21 @@ package automatizacionweb;
 import DocumentCrud.InExcelDocument;
 import DocumentCrud.InWordDocument;
 import DocumentCrud.StartDocument;
+import JViews.ViewManager;
 import com.tigosv.ussdtester.test.BaseClass;
 import com.tigosv.ussdtester.test.TestConstants;
 import connections.SoapConnection;
 import flujoWeb.RegresivaWeb;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import modelData.CP;
 import modelData.ModelCredencial;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+
 
 /**
  *
@@ -164,6 +159,7 @@ public class Manager extends Thread{
         crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
         SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
         ie.createExcelDocument(tableData, 9, "ESTE_ES_EL_EXCEL.xlsx",1);
+        finalizandoProceso();
     }
     
     private void runFlujoWebUssd(){
@@ -180,6 +176,15 @@ public class Manager extends Thread{
                 
             });
         });
+    }
+    
+    private void finalizandoProceso(){
+        if(ViewManager.getInstance().getErrorMessage().equals("")){
+            ViewManager.getInstance().infoBox("Proceso finalizado");
+        }else{
+            ViewManager.getInstance().errorBox();
+        }
+        rw.endProcess();
     }
     
     public String getStartDate(){

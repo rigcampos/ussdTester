@@ -4,6 +4,7 @@
  */
 package DocumentCrud;
 
+import JViews.ViewManager;
 import automatizacionweb.ProgramConstants;
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,7 +59,12 @@ public class InExcelDocument {
                     columnCount = 0;
                 }
                 Cell cell = row.createCell(++columnCount);
-                String  val = dataList[i].equals("") ? "-" : dataList[i];
+                String  val = dataList[i];
+                if(dataList[i].isBlank() || dataList[i].contains(");") || dataList[i].contains("{") 
+                        || dataList[i].contains("}")){
+                    val = "-";
+                }
+                
                 cell.setCellValue(val);
 
             }
@@ -68,10 +74,11 @@ public class InExcelDocument {
          
         try (FileOutputStream outputStream = new FileOutputStream(excelName)) {
             workbook.write(outputStream);
-        } catch (FileNotFoundException ex) {
-            //Logger.getLogger(InWordDocument.class.getName()).log(Level.SEVERE, null, ex);
+            workbook.close();
+            outputStream.close();
         } catch (IOException ex) {
             //Logger.getLogger(InWordDocument.class.getName()).log(Level.SEVERE, null, ex);
+            ViewManager.getInstance().updateErrorMessage("Error en archivo Excel");
         }
     }
     
