@@ -4,6 +4,7 @@
  */
 package com.tigosv.ussdtester.test;
 
+import automatizacionweb.Manager;
 import automatizacionweb.ProgramConstants;
 import com.testinium.deviceinformation.DeviceInfo;
 import com.testinium.deviceinformation.DeviceInfoImpl;
@@ -50,6 +51,8 @@ public class BaseClass {
     private Map<String, MobileElement> numbers;
     private Wait<WebDriver> driverWait;
     private ArrayList<String> imagenes;
+    private String nuevo = "";
+    private String numeroGenerado ="";
 
     private BaseClass() {
         this.deviceInfo = new DeviceInfoImpl(DeviceType.ALL);
@@ -84,6 +87,7 @@ public class BaseClass {
     public void beforeTest(){
         
         try{
+            imagenes = new ArrayList<String>();
              DeviceInfo deviceInfo = new DeviceInfoImpl(DeviceType.ANDROID);
             if (deviceInfo.anyDeviceConnected()) {
                 Device device = deviceInfo.getFirstDevice();
@@ -140,14 +144,17 @@ public class BaseClass {
         int fin  = way.length;
         for(int i=0; i<way.length; i++){
             
-            driver.findElement(By.id(TestConstants.TEST_IFIELD)).sendKeys(way[i]);
+            findElement(By.id(TestConstants.TEST_IFIELD)).sendKeys(way[i]);
             Thread.sleep(1000L);
             tomarScreenShot(i+ProgramConstants.DOCIMAGENAME);
-            driver.findElement(By.id(TestConstants.TEST_BTNOK)).click();
+            findElement(By.id(TestConstants.TEST_BTNOK)).click();
             Thread.sleep(2000L);      
         }
         Thread.sleep(12000L);
         tomarScreenShot(fin+ProgramConstants.DOCIMAGENAME);
+        if(nuevo.equals("774")){
+            guardarNumero();
+        }
         driver.findElement(By.id(TestConstants.TEST_BTNOK)).click();
     }
     
@@ -158,7 +165,8 @@ public class BaseClass {
     public void tomarScreenShot(String name){
         File srcFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
         //String fileName = UUID.randomUUID().toString();
-        String namePath = ProgramConstants.USSDIMAGEPATH + name + ProgramConstants.DOCIMAGEEXT;
+        String namePath = ProgramConstants.USSDIMAGEPATH + Manager.getInstance().getNumeroFlujo()
+                +name + ProgramConstants.DOCIMAGEEXT;
         File targetFile = new File(namePath);
         imagenes.add(namePath);
         try {
@@ -170,7 +178,7 @@ public class BaseClass {
     
     public void marcarCodigo(String call) throws InterruptedException{
         String[] st = call.split("");
-        String nuevo = "";
+        nuevo = "";
         for(int i = st.length-1; i>=st.length-3; i--){
             System.out.println(st[i]);
             nuevo = st[i] + nuevo;
@@ -185,6 +193,13 @@ public class BaseClass {
         numbers.get("call").click();
     }
     
+    public void guardarNumero(){
+        String txt = findElement(By.id("android:id/message")).getText();
+        numeroGenerado = txt.split("DUI:")[1].split(",")[0].trim().replace("-", "");
+        Manager.getInstance().getUserVals().put("Numero generado"
+                            , "72020381"/*numeroGenerado*/);
+    }
+    
     private void allData(String code, String[] flujo){
         this.code = code;
         this.flujo = flujo;
@@ -192,6 +207,10 @@ public class BaseClass {
     
     public ArrayList<String> getImagenes(){
         return this.imagenes;
+    }
+    
+    public String getNumeroGenerado(){
+        return this.numeroGenerado;
     }
     
 //    public void startServer() {

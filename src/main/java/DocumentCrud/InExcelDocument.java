@@ -66,8 +66,8 @@ public class InExcelDocument {
                 }
                 
                 cell.setCellValue(val);
-
             }
+            
             
             rowCount = rowCount +3;
         }

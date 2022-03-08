@@ -42,6 +42,8 @@ public class Manager extends Thread{
     private Map<String,ModelCredencial> credencialesPojo;
     private ArrayList<String> tableData;
     private static String instanceCamino = "";
+    private String actualDoc = ProgramConstants.DOCGENERALFILE;
+    private int numeroFlujo = 0;
 
     private Manager() {
         st= new StartDocument();
@@ -134,30 +136,40 @@ public class Manager extends Thread{
     }
     
     public void processUSSD(){   
-//        st.flujoUssd.forEach((k,v)->{
-//            BaseClass.getInstance().beforeTest();
-//            String call = k;
-//            String[] way = v.split(ProgramConstants.SEPARATORUSSD);
-//            
-//            try {
-//                BaseClass.getInstance().marcarCodigo(call);
-//                BaseClass.getInstance().seguirFlujo(call,way);
-//            } catch (InterruptedException ex) {
-//                Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
-//            }finally{
-//                
-//            }
-//        });
-        crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
-        validacionesExternas();
+        st.flujoUssd.forEach((k,v)->{
+            numeroFlujo = numeroFlujo + 1;
+            BaseClass.getInstance().beforeTest();
+            String call = k;
+            String[] way = v.split(ProgramConstants.SEPARATORUSSD);
+            
+            try {
+                BaseClass.getInstance().marcarCodigo(call);
+                BaseClass.getInstance().seguirFlujo(call,way);
+                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
+                        152,228, ProgramConstants.DOCGENERALFILE);
+                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
+                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
+                    validacionesExternas();
+                }
+                
+            } catch (InterruptedException ex) {
+                //Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
+            }finally{
+                
+            }
+        });
+//        crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
+//        validacionesExternas();
     }
     
     public void validacionesExternas(){
         InExcelDocument ie = new InExcelDocument();
         
         runFlujoWebUssd();
-        crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
-        SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", "79174491");
+        crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,
+                456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
+        SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", 
+                BaseClass.getInstance().getNumeroGenerado());
         ie.createExcelDocument(tableData, 9, "ESTE_ES_EL_EXCEL.xlsx",1);
         finalizandoProceso();
     }
@@ -224,4 +236,7 @@ public class Manager extends Thread{
         this.tableData.add(td);
     }
     
+    public int getNumeroFlujo(){
+        return this.numeroFlujo;
+    }
 }

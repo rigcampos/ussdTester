@@ -7,18 +7,18 @@
 			{"detalle":"Submit","llave":"xpath","valor":"//*[contains(@id,'frmAccess') and contains(@id,'j_idt22')]","accion":"1","input":""},
 			{"detalle":"Correr funcion elemento","llave":"xpath","valor":"//*[contains(text(),'Consulta de provisioning')]","accion":"22","input":""},
 			{"detalle":"Cambiar de frame","llave":"id","valor":"contenedorExternas","accion":"18","input":""},
-			{"detalle":"Escribir numero para consulta","llave":"xpath","valor":"//input[@id='frmBody:tabView:phone']","accion":"2","input":"72020381"},
+			{"detalle":"Escribir numero para consulta","llave":"xpath","valor":"//input[@id='frmBody:tabView:phone']","accion":"2","input":"Numero generado"},
 			{"detalle":"Click en buscar","llave":"id","valor":"frmBody:tabView:btnConsulta","accion":"1","input":""},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
 			{"detalle":"Click cambio de menu","llave":"xpath","valor":"//*[contains(text(),'Product OrdersViewer')]","accion":"1","input":""},
-			{"detalle":"Escribir numero para buscar","llave":"id","valor":"frmBody:tabView:txtPhone","accion":"2","input":"72020381"},
+			{"detalle":"Escribir numero para buscar","llave":"id","valor":"frmBody:tabView:txtPhone","accion":"2","input":"Numero generado"},
 			{"detalle":"Click en buscar","llave":"id","valor":"frmBody:tabView:btnBuscar","accion":"1","input":""},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
 			{"detalle":"Click cambio de menu","llave":"xpath","valor":"//*[contains(text(),'Query PCRF')]","accion":"1","input":""},
-			{"detalle":"Escribir numero para buscar","llave":"id","valor":"frmBody:tabView:mskMsisdn","accion":"2","input":"72020381"},
+			{"detalle":"Escribir numero para buscar","llave":"id","valor":"frmBody:tabView:mskMsisdn","accion":"2","input":"Numero generado"},
 			{"detalle":"Click para buscar","llave":"id","valor":"frmBody:tabView:cmbQueryExecute","accion":"1","input":""},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
@@ -40,7 +40,7 @@
 			{"detalle":"click en menu","llave":"id","valor":"shortcut_302004001","accion":"1","input":""},
 			{"detalle":"cambio frame","llave":"id","valor":"tabPage_302004001_iframe","accion":"18","input":""},
 			{"detalle":"click subcriber","llave":"id","valor":"link_1492085635515_42082","accion":"1","input":""},
-			{"detalle":"Escribir numero","llave":"id","valor":"ownerKey_input_value","accion":"2","input":"72020381"},
+			{"detalle":"Escribir numero","llave":"id","valor":"ownerKey_input_value","accion":"2","input":"Numero generado"},
 			{"detalle":"Click en buscar","llave":"id","valor":"freeQueryButton","accion":"1","input":""},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
@@ -48,7 +48,10 @@
 			{"detalle":"Abrir archivo XML","llave":"","valor":"","accion":"3","input":"user.dir"},
 			{"detalle":"esperar","llave":"","valor":"","accion":"12","input":""},
 			{"detalle":"Ver subscriber 2","llave":"xpath","valor":"(//*[contains(text(),'C_SUBSCRIBER_INFO_2')])[2]","accion":"5","input":""},
-			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""}
+			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
+			{"detalle":"Ir a EPOS","llave":"","valor":"","accion":"3","input":"http://epos.sv.tigo.com:8080/tigo-pos-web/index.jsp"},
+			{"detalle":"Ingresar usuario","llave":"name","valor":"j_username","accion":"2","input":"Usuario de Epos"},
+			{"detalle":"Ingresar password","llave":"name","valor":"j_password","accion":"2","input":"Password de Epos"}
 		]
 	}
 }]
