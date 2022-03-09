@@ -49,6 +49,8 @@ public class Manager extends Thread{
     private String actualDoc = ProgramConstants.DOCGENERALFILE;
     private int numeroFlujo = 0;
     private Map credencialesGuardadas;
+    private Map<String,String> guardarSim;
+    private String call="";
 
     private Manager() {
         st= new StartDocument();
@@ -58,6 +60,7 @@ public class Manager extends Thread{
         startDate = getNowDate();
         tableData = new ArrayList<String>();
         credencialesGuardadas = new HashMap<String, String>();
+        guardarSim = new HashMap<String,String>();
     }
 
     public static synchronized Manager getInstance() {
@@ -144,28 +147,28 @@ public class Manager extends Thread{
     
     public void processUSSD(){   
         st.flujoUssd.forEach((k,v)->{
-//            numeroFlujo = numeroFlujo + 1;
-//            BaseClass.getInstance().beforeTest();
-//            String call = k;
+            numeroFlujo = numeroFlujo + 1;
+            BaseClass.getInstance().beforeTest();
+            call = k;
             String[] way = v.split(ProgramConstants.SEPARATORUSSD);
             
-//            try {
-//                BaseClass.getInstance().marcarCodigo(call);
-//                BaseClass.getInstance().seguirFlujo(call,way);
-//                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
-//                        152,228, ProgramConstants.DOCGENERALFILE);
-//                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
-//                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
-//                    validacionesExternas();
-//                }
-//                
-//            } catch (InterruptedException ex) {
-//            }finally{
-//                
-//            }
+            try {
+                BaseClass.getInstance().marcarCodigo(call);
+                BaseClass.getInstance().seguirFlujo(call,way);
+                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
+                        152,228, ProgramConstants.DOCGENERALFILE);
+                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
+                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
+                    validacionesExternas();
+                }
+                
+            } catch (InterruptedException ex) {
+            }finally{
+                
+            }
         });
 //        crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
-        validacionesExternas();
+//        validacionesExternas();
     }
     
     public void validacionesExternas(){
@@ -271,6 +274,18 @@ public class Manager extends Thread{
     
     public void updateTableData(String td){
         this.tableData.add(td);
+    }
+
+    public Map<String, String> getGuardarSim() {
+        return guardarSim;
+    }
+
+    public void setGuardarSim(Map<String, String> guardarSim) {
+        this.guardarSim = guardarSim;
+    }
+
+    public String getCall() {
+        return call;
     }
     
     public int getNumeroFlujo(){

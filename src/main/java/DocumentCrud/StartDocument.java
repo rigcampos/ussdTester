@@ -40,12 +40,14 @@ public class StartDocument {
     private JSONParser jsonParser;
     private ArrayList<CP> cpList;
     private Map<String,ModelCredencial> credencialesPojo;
+    private Map<String,String> guardarSim;
     
     public StartDocument() {
         flujos = new LinkedHashMap<String, TreeMap>();
         credenciales = new LinkedHashMap<String, ArrayList<String>>();
         flujoUssd = new LinkedHashMap<String, String>();
         credencialesPojo = new HashMap<String,ModelCredencial>();
+        guardarSim = new HashMap<String,String>();
         jsonParser = new JSONParser();
         cpList = new ArrayList<CP>(); 
     }
@@ -107,8 +109,14 @@ public class StartDocument {
             for(int i = ProgramConstants.EXCELSTART; i<=sheet.getLastRowNum(); i++){
                 
                 flujoUssd.put(i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue(), 
-                        sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getRawValue());
+                        sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue());
+                if(sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue().contains("774")){
+                    guardarSim.put(i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue(),
+                        sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue().split(",")[7]);
+                }
             }
+            
+            Manager.getInstance().setGuardarSim(guardarSim);
             
             file.close();
             workbook.close();

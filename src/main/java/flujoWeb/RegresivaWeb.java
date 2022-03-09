@@ -236,6 +236,10 @@ public class RegresivaWeb {
                     //moveToElement(element);
                     Manager.getInstance().updateTableData(val + ((JavascriptExecutor) driver).
                         executeScript(tableScript(currentAtr)).toString());
+                }case ProgramConstants.ACTIONCODIGOSIM->{
+                    
+                    element.sendKeys("8950303030"+Manager.getInstance().
+                            getGuardarSim().get(Manager.getInstance().getCall()));
                 }
             }
             return true;
