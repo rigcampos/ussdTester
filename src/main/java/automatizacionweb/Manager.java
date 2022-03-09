@@ -12,6 +12,8 @@ import com.tigosv.ussdtester.test.BaseClass;
 import com.tigosv.ussdtester.test.TestConstants;
 import connections.SoapConnection;
 import flujoWeb.RegresivaWeb;
+import java.io.File;
+import java.io.FileWriter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ import java.util.TreeMap;
 
 import modelData.CP;
 import modelData.ModelCredencial;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 
 /**
@@ -44,6 +48,7 @@ public class Manager extends Thread{
     private static String instanceCamino = "";
     private String actualDoc = ProgramConstants.DOCGENERALFILE;
     private int numeroFlujo = 0;
+    private Map credencialesGuardadas;
 
     private Manager() {
         st= new StartDocument();
@@ -52,6 +57,7 @@ public class Manager extends Thread{
         saveVals = new HashMap<String, String>();
         startDate = getNowDate();
         tableData = new ArrayList<String>();
+        credencialesGuardadas = new HashMap<String, String>();
     }
 
     public static synchronized Manager getInstance() {
@@ -78,6 +84,7 @@ public class Manager extends Thread{
         st.readFlujoExcel();
         st.readJson(TestConstants.JSON_NAME_USSD);
         st.readJson(TestConstants.JSON_NAME_CREDENCIALES);
+        st.readJson(TestConstants.JSON_GUARDADO);
         cpList = st.getCpList();
         credencialesPojo = st.getCredencialesPojo();
     }
@@ -137,29 +144,28 @@ public class Manager extends Thread{
     
     public void processUSSD(){   
         st.flujoUssd.forEach((k,v)->{
-            numeroFlujo = numeroFlujo + 1;
-            BaseClass.getInstance().beforeTest();
-            String call = k;
+//            numeroFlujo = numeroFlujo + 1;
+//            BaseClass.getInstance().beforeTest();
+//            String call = k;
             String[] way = v.split(ProgramConstants.SEPARATORUSSD);
             
-            try {
-                BaseClass.getInstance().marcarCodigo(call);
-                BaseClass.getInstance().seguirFlujo(call,way);
-                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
-                        152,228, ProgramConstants.DOCGENERALFILE);
-                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
-                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
-                    validacionesExternas();
-                }
-                
-            } catch (InterruptedException ex) {
-                //Logger.getLogger(Manager.class.getName()).log(Level.SEVERE, null, ex);
-            }finally{
-                
-            }
+//            try {
+//                BaseClass.getInstance().marcarCodigo(call);
+//                BaseClass.getInstance().seguirFlujo(call,way);
+//                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
+//                        152,228, ProgramConstants.DOCGENERALFILE);
+//                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
+//                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
+//                    validacionesExternas();
+//                }
+//                
+//            } catch (InterruptedException ex) {
+//            }finally{
+//                
+//            }
         });
 //        crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
-//        validacionesExternas();
+        validacionesExternas();
     }
     
     public void validacionesExternas(){
@@ -197,6 +203,37 @@ public class Manager extends Thread{
             ViewManager.getInstance().errorBox();
         }
         rw.endProcess();
+    }
+    
+    public void saveDataCredencial(){
+        
+        JSONObject details = new JSONObject();
+        userVals.forEach((k,v)->{
+            boolean b = true;
+            for(int i = 0; i<ProgramConstants.NEVERSAVE.length; i++){
+                if(k.toLowerCase().contains(ProgramConstants.NEVERSAVE[i])){
+                    b = false;
+                }
+            }
+            if(b){
+                JSONObject employeeDetails = new JSONObject();
+                details.put(k, v);
+            }
+        });
+        
+        JSONObject saveObject = new JSONObject(); 
+        saveObject.put("Credenciales", details);
+        
+        JSONArray listadatos = new JSONArray();
+        listadatos.add(saveObject);
+        
+        try (FileWriter file = new FileWriter("datos_guardados.json")){
+                        
+            file.write(listadatos.toString());
+            file.flush();
+            
+        } catch (Exception e) {
+        }
     }
     
     public String getStartDate(){
@@ -238,5 +275,13 @@ public class Manager extends Thread{
     
     public int getNumeroFlujo(){
         return this.numeroFlujo;
+    }
+
+    public Map getCredencialesGuardadas() {
+        return credencialesGuardadas;
+    }
+
+    public void setCredencialesGuardadas(Map credencialesGuardadas) {
+        this.credencialesGuardadas = credencialesGuardadas;
     }
 }

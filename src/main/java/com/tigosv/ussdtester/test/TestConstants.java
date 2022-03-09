@@ -35,6 +35,7 @@ public final class TestConstants {
     public final static String TEST_BTNOK = "android:id/button1";
     public final static String JSON_NAME_USSD = "ussd_web.json";
     public final static String JSON_NAME_CREDENCIALES = "credenciales.json";
+    public final static String JSON_GUARDADO = "datos_guardados.json";
     public final static String CP_NAME = "CP";
     public final static String FLUJO_NAME = "flujo";
     public final static String CRED_NAME_USSD = "credenciales.json";

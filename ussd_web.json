@@ -51,7 +51,14 @@
 			{"detalle":"Tomar screenshoot","llave":"","valor":"","accion":"4","input":""},
 			{"detalle":"Ir a EPOS","llave":"","valor":"","accion":"3","input":"http://epos.sv.tigo.com:8080/tigo-pos-web/index.jsp"},
 			{"detalle":"Ingresar usuario","llave":"name","valor":"j_username","accion":"2","input":"Usuario de Epos"},
-			{"detalle":"Ingresar password","llave":"name","valor":"j_password","accion":"2","input":"Password de Epos"}
+			{"detalle":"Ingresar password","llave":"name","valor":"j_password","accion":"2","input":"Password de Epos"},
+			{"detalle":"Continuar","llave":"xpath","valor":"//input[@value='Ingresar']","accion":"1","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"formMenu:j_id10","accion":"5","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"formMenu:j_id10","accion":"1","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"formMenu:j_id12:anchor","accion":"1","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"formMenu:j_id27:anchor","accion":"1","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"form1:inSerie","accion":"5","input":""},
+			{"detalle":"click inventario","llave":"id","valor":"form1:inSerie","accion":"2","input":""}
 		]
 	}
 }]

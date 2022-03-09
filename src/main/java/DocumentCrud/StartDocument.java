@@ -4,6 +4,7 @@
  */
 package DocumentCrud;
 
+import automatizacionweb.Manager;
 import automatizacionweb.ProgramConstants;
 import com.tigosv.ussdtester.test.TestConstants;
 import java.io.BufferedReader;
@@ -106,7 +107,7 @@ public class StartDocument {
             for(int i = ProgramConstants.EXCELSTART; i<=sheet.getLastRowNum(); i++){
                 
                 flujoUssd.put(i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue(), 
-                        sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue());
+                        sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getRawValue());
             }
             
             file.close();
@@ -145,6 +146,12 @@ public class StartDocument {
                 System.out.println(jo);
                 JSONObject credenciales = (JSONObject) jo.get(TestConstants.FLUJO_NAME);
                 credencialesPojo.put((String)credenciales.get("titulo"),new ModelCredencial(credenciales));
+            }case TestConstants.JSON_GUARDADO ->{
+                
+                Manager.getInstance().setCredencialesGuardadas((JSONObject) jo.get("Credenciales"));
+        //JSONArray tempList = (JSONArray) c.get("credenciales");
+        //this.credenciales = ((JSONObject)tempList.get(0));
+                
             }
         }
         

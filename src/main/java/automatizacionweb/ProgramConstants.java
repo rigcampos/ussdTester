@@ -4,6 +4,8 @@
  */
 package automatizacionweb;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author rigcampos
@@ -86,5 +88,5 @@ public final class ProgramConstants {
     public static final String USSDNAME = "soapxml.xml";
     public static final String MENURECURSIVA = "Regresivas";
     public static final String MENUUSSD = "USSD";
-    
+    public static final String[] NEVERSAVE = {/*"pass","contra","credi","tarjeta","cvv"*/};
 }

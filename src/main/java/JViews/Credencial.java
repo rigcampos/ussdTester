@@ -4,6 +4,7 @@
  */
 package JViews;
 
+import automatizacionweb.Manager;
 import automatizacionweb.ProgramConstants;
 
 /**
@@ -27,6 +28,7 @@ public class Credencial {
         //inputPass = new javax.swing.JPasswordField();
         component = clave ? new javax.swing.JPasswordField() : new javax.swing.JTextField();
         formato();
+        revisarG(key);
     }
     
     private void formato(){
@@ -79,6 +81,13 @@ public class Credencial {
         }
         
         return valText;
+    }
+    
+    private void revisarG(String k){
+        String v = (String) Manager.getInstance().getCredencialesGuardadas().get(k);
+        if(clave)((javax.swing.JPasswordField)component).setText(v);
+        else ((javax.swing.JTextField)component).setText(v);
+        
     }
     
 }
