@@ -41,6 +41,7 @@ public class StartDocument {
     private ArrayList<CP> cpList;
     private Map<String,ModelCredencial> credencialesPojo;
     private Map<String,String> guardarSim;
+    private Map<String,ArrayList<String>> datosExcel;
     
     public StartDocument() {
         flujos = new LinkedHashMap<String, TreeMap>();
@@ -49,10 +50,12 @@ public class StartDocument {
         credencialesPojo = new HashMap<String,ModelCredencial>();
         guardarSim = new HashMap<String,String>();
         jsonParser = new JSONParser();
-        cpList = new ArrayList<CP>(); 
+        cpList = new ArrayList<CP>();
+        datosExcel = new HashMap<String,ArrayList<String>>();
     }
     
     public void readStartDocument(){
+        
         try{
             File file = new File(ProgramConstants.STARTFILE);
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -107,17 +110,27 @@ public class StartDocument {
             XSSFWorkbook workbook = new XSSFWorkbook(file);
             XSSFSheet sheet = workbook.getSheet(ProgramConstants.EXCELSHEETNAME);
             for(int i = ProgramConstants.EXCELSTART; i<=sheet.getLastRowNum(); i++){
-                
-                flujoUssd.put(i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue(), 
+                String v0 = i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue();
+                flujoUssd.put(v0, 
                         sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue());
-                if(sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue().contains("774")){
-                    guardarSim.put(i+sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN - 1).getRawValue(),
+                if(v0.contains("774")){
+                    guardarSim.put(v0,
                         sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue().split(",")[7]);
+                    ArrayList<String> temporal = new ArrayList<String>();
+                    String v1 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN+1).getStringCellValue();
+                    String v2 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN+2).getStringCellValue();
+                    String v3 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN+3).getStringCellValue();
+                    String v4 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN+4).getStringCellValue();
+                    String v5 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN+5).getStringCellValue();
+                    String v6 = sheet.getRow(i).getCell(ProgramConstants.EXCELCOLUMN).getStringCellValue().split(",")[10];
+                    temporal.add(v1);temporal.add(v2);temporal.add(v3);temporal.add(v4);temporal.add(v5);temporal.add(v6);
+                    datosExcel.put(v0, temporal);
+                    System.out.println(temporal);
                 }
             }
             
             Manager.getInstance().setGuardarSim(guardarSim);
-            
+            Manager.getInstance().setDatosExcel(datosExcel);
             file.close();
             workbook.close();
              
@@ -150,6 +163,10 @@ public class StartDocument {
             case TestConstants.JSON_NAME_USSD ->{
                 JSONObject cp = (JSONObject) jo.get(TestConstants.CP_NAME);
                 cpList.add(new CP(cp));
+                JSONObject cp2 = (JSONObject) jo.get("CP2");
+                cpList.add(new CP(cp2));
+                JSONObject cp3 = (JSONObject) jo.get("CP3");
+                cpList.add(new CP(cp3));
             }case TestConstants.JSON_NAME_CREDENCIALES ->{
                 System.out.println(jo);
                 JSONObject credenciales = (JSONObject) jo.get(TestConstants.FLUJO_NAME);

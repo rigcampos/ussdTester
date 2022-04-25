@@ -30,15 +30,17 @@ public class InExcelDocument {
     private ArrayList<String> pagesName;
     private TreeMap<String,ArrayList<String>> internalData;
     private String filePathUpdate;
+    private int temp = 1;
     
     public InExcelDocument() {
         pagesName = new ArrayList<String>();
     }
     
-    public void createExcelDocument(ArrayList<String> data, int corte, String excelName, int startRow){
+    public void createExcelDocument(ArrayList<String> data, int co, String excelName, int startRow){
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet(ProgramConstants.XLSXSHEETNAME);
-        
+        int corte = temp%2 == 0? 11:9;
+        System.out.println(temp%2); System.out.println(corte);
         int rowCount = startRow;
         int cambio = 0;
         int columnCount = 0;
@@ -53,7 +55,9 @@ public class InExcelDocument {
 
             Row row = sheet.createRow(rowCount);
             for(int i = 0; i<dataList.length; i++){
+                System.out.println("focus en el excel");
                 if((i % corte) == 0){
+                    System.out.println("entramos!!!!!!!!!!!!!!!!!!!!!!1");
                     row = sheet.createRow(rowCount);
                     rowCount = rowCount + 1;
                     columnCount = 0;
@@ -61,16 +65,19 @@ public class InExcelDocument {
                 Cell cell = row.createCell(++columnCount);
                 String  val = dataList[i];
                 if(dataList[i].isBlank() || dataList[i].contains(");") || dataList[i].contains("{") 
-                        || dataList[i].contains("}")){
+                        || dataList[i].contains("}") || dataList[i].contains("lick") 
+                        || dataList[i].contains("electe") || dataList[i].contains("econd")){
                     val = "-";
                 }
                 
                 cell.setCellValue(val);
             }
             
-            
+            temp = temp+1;
+            corte = temp%2 == 0? 11:9;
             rowCount = rowCount +3;
         }
+        
          
         try (FileOutputStream outputStream = new FileOutputStream(excelName)) {
             workbook.write(outputStream);

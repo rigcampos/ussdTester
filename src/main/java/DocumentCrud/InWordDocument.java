@@ -52,6 +52,8 @@ public class InWordDocument {
             out.close();
             
         }catch(IOException s){
+            System.out.println(s.getCause());
+            System.out.println(s.getMessage());
             ViewManager.getInstance().updateErrorMessage("Error en el archivo de word");
         }  
     }
@@ -102,10 +104,15 @@ public class InWordDocument {
             List<XWPFRun> runs = p.getRuns();
             if (runs != null) {
                 for (XWPFRun r : runs) {
-                    String text = r.getText(0);
+                    
+                    String text = r.text();
+                    System.out.println(text);
                     if (text != null && text.contains(target)) {
-                        text = text.replace(target, target + ": " + date);
-                        r.setText(text, 0);
+                        //text = text.replace(text, );
+                        System.out.println(text);
+                        
+                        r.setText(target + ": " + date,0);
+                        System.out.println("RESULTADO -> " + r.text());;
                     }
                 }
             }

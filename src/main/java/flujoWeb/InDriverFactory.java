@@ -19,6 +19,8 @@ public class InDriverFactory {
         switch(driverType){
             case "Chrome" -> {
                 return new InternalChromeDriver();
+            }case "IE" -> {
+                return new InternalExplorerDriver();
             }
                 
         }

@@ -64,6 +64,8 @@ public class SoapConnection{
             byte[] buffer = new byte[xmlInput.length()];
             buffer = xmlInput.getBytes();
             bout.write(buffer);
+            System.out.println(xmlInput);
+            System.out.println(numero);
             byte[] b = bout.toByteArray();
             String SOAPAction = "getUserDetails";
             httpConn.setRequestProperty("Content-Length", String.valueOf(b.length));

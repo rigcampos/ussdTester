@@ -42,6 +42,39 @@ public class ActionBtn extends MouseAdapter{
                 Manager.getInstance(ViewManager.getInstance().getMenuSelected().getText()).start();
                 Manager.getInstance().saveDataCredencial();
                 
+            }case ProgramConstants.BTNSOLOUSSD->{
+                for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
+                    Manager.getInstance().getUserVals().put(credencial.getKeyText()
+                            , credencial.getValText());
+                    //System.out.println(credencial.getKeyText());
+                    //System.out.println(credencial.getValText());
+                }
+                ViewManager.getInstance().minimizarMainW();
+                if(!Manager.instanceCamino.equals("")){
+                    System.out.println("VAMOS A IR A LAGO?");
+                    Manager.getInstance(ProgramConstants.BTNSOLOUSSD).run();
+                }else{
+                    System.out.println("VAMOS A IR A LAGO?????????");
+                    Manager.getInstance(ProgramConstants.BTNSOLOUSSD).start();
+                }
+                
+                Manager.getInstance().saveDataCredencial();
+                
+            }case ProgramConstants.BTNSOLOPLATAFORMA->{
+                for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
+                    Manager.getInstance().getUserVals().put(credencial.getKeyText()
+                            , credencial.getValText());
+                    //System.out.println(credencial.getKeyText());
+                    //System.out.println(credencial.getValText());
+                }
+                ViewManager.getInstance().minimizarMainW();
+                if(!Manager.instanceCamino.equals("")){
+                    Manager.getInstance(ProgramConstants.BTNSOLOPLATAFORMA).run();
+                }else{
+                    Manager.getInstance(ProgramConstants.BTNSOLOPLATAFORMA).start();
+                }
+                Manager.getInstance().saveDataCredencial();
+                
             }
             default ->{
                 ViewManager.getInstance().deleteAll();

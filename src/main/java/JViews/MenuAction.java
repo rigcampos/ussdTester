@@ -38,7 +38,18 @@ public class MenuAction extends MouseAdapter{
                 ViewManager.getInstance().showUSSDCredencial(menu);
                 ViewManager.getInstance().getMenuSelected().setBackground(ProgramConstants.BTNCOLORMENUDE);
                 ViewManager.getInstance().setMenuSelected((JLabel)e.getComponent());
-                ViewManager.getInstance().showBtnContinuar();
+                ViewManager.getInstance().showBtnSoloUssd();
+                ViewManager.getInstance().showBtnSoloPlataforma();
+                //ViewManager.getInstance().showBtnContinuar();
+            }
+            case ProgramConstants.MENUFLUJOSQA->{
+                e.getComponent().setBackground(ProgramConstants.BTNCOLORMENUSE);
+                //ViewManager.getInstance().showUSSDCredencial(menu);
+                ViewManager.getInstance().getMenuSelected().setBackground(ProgramConstants.BTNCOLORMENUDE);
+                ViewManager.getInstance().setMenuSelected((JLabel)e.getComponent());
+                //ViewManager.getInstance().showBtnSoloUssd();
+                //ViewManager.getInstance().showBtnSoloPlataforma();
+                //ViewManager.getInstance().showBtnContinuar();
             }
             default ->{
                 System.out.println("Boton no asignado aun D:");

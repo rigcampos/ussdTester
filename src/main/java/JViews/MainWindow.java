@@ -30,6 +30,7 @@ public class MainWindow extends javax.swing.JFrame {
         setVisible(true);
         mRecursivas.addMouseListener(new MenuAction(mRecursivas.getText()));
         mUSSD.addMouseListener(new MenuAction(mUSSD.getText()));
+        mFlujosQA.addMouseListener(new MenuAction(mFlujosQA.getText()));
         //ViewManager.getInstance().setMenuSelected(mRecursivas);
         //setResizable(false);
         //setExtendedState(ICONIFIED); //31797833
@@ -48,6 +49,7 @@ public class MainWindow extends javax.swing.JFrame {
         logo = new javax.swing.JLabel();
         mRecursivas = new javax.swing.JLabel();
         mUSSD = new javax.swing.JLabel();
+        mFlujosQA = new javax.swing.JLabel();
         mainPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -75,6 +77,14 @@ public class MainWindow extends javax.swing.JFrame {
         mUSSD.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         mUSSD.setOpaque(true);
 
+        mFlujosQA.setBackground(new java.awt.Color(0, 25, 80));
+        mFlujosQA.setFont(new java.awt.Font("SansSerif", 1, 17)); // NOI18N
+        mFlujosQA.setForeground(new java.awt.Color(255, 255, 255));
+        mFlujosQA.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        mFlujosQA.setText(ProgramConstants.MENUFLUJOSQA);
+        mFlujosQA.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        mFlujosQA.setOpaque(true);
+
         javax.swing.GroupLayout mainMenuLayout = new javax.swing.GroupLayout(mainMenu);
         mainMenu.setLayout(mainMenuLayout);
         mainMenuLayout.setHorizontalGroup(
@@ -82,6 +92,7 @@ public class MainWindow extends javax.swing.JFrame {
             .addComponent(logo, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
             .addComponent(mRecursivas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(mUSSD, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(mFlujosQA, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         mainMenuLayout.setVerticalGroup(
             mainMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -91,6 +102,8 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(mRecursivas, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mUSSD, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(mFlujosQA, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
@@ -178,6 +191,7 @@ public class MainWindow extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel logo;
+    private javax.swing.JLabel mFlujosQA;
     private javax.swing.JLabel mRecursivas;
     private javax.swing.JLabel mUSSD;
     private javax.swing.JPanel mainMenu;

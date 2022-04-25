@@ -154,20 +154,24 @@ public class RegresivaWeb {
         } 
     }
     
-    public void waitAction(String act,String key, String atr , String val){
+    public Boolean waitAction(String act,String key, String atr , String val){
         currentAtr = atr;
         try {
             WebElement element = findElement(byParameter(key, atr));
-            driverWait.until(new Function<WebDriver, Boolean>() {
+            return driverWait.until(new Function<WebDriver, Boolean>() {
                 public Boolean apply(WebDriver driver) {
                     return doAction( act, element, val);
                 }
             });
         } catch (Exception e) {
             System.out.println("No se pudo realizar la accion dos");
-            System.out.println("Mensaje: " + e.getMessage());
-            System.out.println("Causa: " + e.getCause());
-            e.printStackTrace();
+            //System.out.println("Mensaje: " + e.getMessage());
+            //System.out.println("Causa: " + e.getCause());
+            //e.printStackTrace();
+            if(act.equals("45") && atr.equals("form1:tablaSeriales:11:nSeriales")){
+                doAction( "45", null, val);
+            }
+            return false;
             
         }finally{
         }
@@ -232,7 +236,7 @@ public class RegresivaWeb {
                 }case ProgramConstants.ACTIONRUNCLICK ->{
                     JavascriptExecutor js = (JavascriptExecutor) driver; 
                     js.executeScript("arguments[0].click();",element);
-                }case ProgramConstants.ACTIONPRUEBA->{
+                }case ProgramConstants.ACTIONTABLA->{
                     //moveToElement(element);
                     Manager.getInstance().updateTableData(val + ((JavascriptExecutor) driver).
                         executeScript(tableScript(currentAtr)).toString());
@@ -240,11 +244,42 @@ public class RegresivaWeb {
                     
                     element.sendKeys("8950303030"+Manager.getInstance().
                             getGuardarSim().get(Manager.getInstance().getCall()));
+                }case ProgramConstants.ACTIONEXCELELE->{
+                    element.sendKeys(Manager.getInstance().getDatosExcel()
+                            .get(Manager.getInstance().getCall()).get(Integer.parseInt(val)));
+                }case ProgramConstants.ACTIONEXCELWEB->{
+                    element.sendKeys(Manager.getInstance().getDatosExcel()
+                            .get(Manager.getInstance().getCall()).get(Integer.parseInt(val)));
+                    
+                }case ProgramConstants.ACTIONRUNFN->{
+                    JavascriptExecutor js = (JavascriptExecutor) driver; 
+                    js.executeScript(val);
+                }case ProgramConstants.ACTIONCLEAR->{
+                    element.clear();
+                }case ProgramConstants.ACTIONIE->{
+                    iwd.driverQuit();
+                    driverStart("IE","");
+                }case "45"->{
+                    for(int i = 0; i<10; i++){
+                        try {
+                            
+                            if(waitAction("5","xpath", "//*[contains(text(),'"+
+                                    Manager.getInstance().getGuardarSim().get(Manager.getInstance().getCall())+"')]" , "")){
+                                i = 99;
+                            }
+                            String temp = i >= 1 ? "(//*[@class=' dr-dscr-button rich-datascr-button'])[4]" : "(//*[@class=' dr-dscr-button rich-datascr-button'])[2]";
+                            waitAction("1","xpath", temp , "");
+                        } catch (Exception e) {
+                            System.out.println("NO ENCONTRAMOS NADA");
+                        }
+                    }
+                    System.out.println("estamos en 45");
                 }
             }
             return true;
         } catch (Exception e) {
             System.out.println("No se pudo realizar la accion tres");
+            System.out.println(act + " ------- " + element + " ---- " + val);
             System.out.println("Mensaje: " + e.getMessage());
             System.out.println("Causa: " + e.getCause());
             e.printStackTrace();

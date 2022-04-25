@@ -23,6 +23,7 @@ public final class ProgramConstants {
     public static final String DOCIMAGENAME = "screenShoot";
     public static final String DOCFECHAINICO = "Fecha Inicio";
     public static final String DOCFECHAFIN = "Fecha Fin";
+    public static final String ACTIONJUMP = "0";
     public static final String ACTIONCLICK = "1";
     public static final String ACTIONWRITE = "2";
     public static final String ACTIONGOTO = "3";
@@ -45,8 +46,13 @@ public final class ProgramConstants {
     public static final String ACTIONDROPDOWN = "20";
     public static final String ACTIONOPENNEW = "21";
     public static final String ACTIONRUNCLICK = "22";
-    public static final String ACTIONPRUEBA = "23";
+    public static final String ACTIONTABLA = "23";
     public static final String ACTIONCODIGOSIM= "24";
+    public static final String ACTIONEXCELELE= "25";
+    public static final String ACTIONEXCELWEB= "26";
+    public static final String ACTIONRUNFN= "27";
+    public static final String ACTIONCLEAR= "28";
+    public static final String ACTIONIE= "29";
     public static final String LABELCODIGO = "Codigo de confirmacion";
     public static final String STARTTITLE = "##";
     public static final String STARTSEPARATOR = " -- ";
@@ -56,9 +62,12 @@ public final class ProgramConstants {
     public static final String XLSXSHEETNAME = "Automatizacion_Web";
     public static final String DOCGENERALFILE = "resources/documentation/plantillas/Plantilla general automatizacion.docx";
     public static final String DOCRESULTEXT = ".docx";
+    public static final String PLATAFORMAS = "documento_plataformas";
     public static final String LOGODIR = "resources/image/tigo logo.PNG";
     public static final String PLATAFORMFILE = "resources/plataformas.txt";
     public static final String BTNCONTINUAR = "Continuar";
+    public static final String BTNSOLOUSSD = "USSD";
+    public static final String BTNSOLOPLATAFORMA = "Plataformas";
     public static final String KEYPASS = "Password";
     public static final String KEYFECHA = "Fecha de expiracion";
     public static final String KEYCVV = "cvv de la tarjeta";
@@ -89,5 +98,6 @@ public final class ProgramConstants {
     public static final String USSDNAME = "soapxml.xml";
     public static final String MENURECURSIVA = "Regresivas";
     public static final String MENUUSSD = "USSD";
+    public static final String MENUFLUJOSQA = "Flujos QA";
     public static final String[] NEVERSAVE = {/*"pass","contra","credi","tarjeta","cvv"*/};
 }

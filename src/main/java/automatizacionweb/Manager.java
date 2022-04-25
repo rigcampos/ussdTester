@@ -45,12 +45,14 @@ public class Manager extends Thread{
     private ArrayList<CP> cpList;
     private Map<String,ModelCredencial> credencialesPojo;
     private ArrayList<String> tableData;
-    private static String instanceCamino = "";
+    public static String instanceCamino = "";
     private String actualDoc = ProgramConstants.DOCGENERALFILE;
     private int numeroFlujo = 0;
     private Map credencialesGuardadas;
     private Map<String,String> guardarSim;
+    private Map<String,ArrayList<String>> datosExcel;
     private String call="";
+    private int[] flujoActive = new int[]{0,0,0}; 
 
     private Manager() {
         st= new StartDocument();
@@ -72,6 +74,7 @@ public class Manager extends Thread{
     }
     
     public static synchronized Manager getInstance(String camino) {
+        
         instanceCamino = camino;
         if (instance == null) {
             instance = new Manager();
@@ -102,8 +105,10 @@ public class Manager extends Thread{
             case ProgramConstants.MENURECURSIVA ->{
                 startFlujo();
             }
-            case ProgramConstants.MENUUSSD ->{
+            case ProgramConstants.BTNSOLOUSSD ->{
                 processUSSD();
+            }case ProgramConstants.BTNSOLOPLATAFORMA ->{
+                validacionesExternas();
             }
         }
     }
@@ -145,7 +150,7 @@ public class Manager extends Thread{
         return now.getDayOfMonth() +"/"+now.getMonthValue()+"/"+now.getYear();
     }
     
-    public void processUSSD(){   
+    public void processUSSD(){
         st.flujoUssd.forEach((k,v)->{
             numeroFlujo = numeroFlujo + 1;
             BaseClass.getInstance().beforeTest();
@@ -153,39 +158,53 @@ public class Manager extends Thread{
             String[] way = v.split(ProgramConstants.SEPARATORUSSD);
             
             try {
+                //BaseClass.getInstance().aceptAllPermision();
                 BaseClass.getInstance().marcarCodigo(call);
                 BaseClass.getInstance().seguirFlujo(call,way);
-                crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,
-                        152,228, ProgramConstants.DOCGENERALFILE);
-                actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
-                if(BaseClass.getInstance().getNumeroGenerado().length()>0){
-                    validacionesExternas();
-                }
+                crearArchivoWord(BaseClass.getInstance().getImagenes(), call + ProgramConstants.EXCELSHEETNAME,
+                        152,228, actualDoc);
+                //actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
                 
             } catch (InterruptedException ex) {
             }finally{
                 
             }
         });
-//        crearArchivoWord(BaseClass.getInstance().getImagenes(), ProgramConstants.EXCELSHEETNAME,152,228, ProgramConstants.DOCGENERALFILE);
-//        validacionesExternas();
     }
     
     public void validacionesExternas(){
-        InExcelDocument ie = new InExcelDocument();
+        int count = 0;
+        for(Map.Entry<String,ArrayList<String>> entry: datosExcel.entrySet()){
+            String k = entry.getKey();
+            ArrayList<String> v = entry.getValue();
+            call = k;
+            System.out.println(k);
+            InExcelDocument ie = new InExcelDocument();
+            SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", 
+                    v.get(4));
+            runFlujoWebUssd(v);
+            String temp = count == 0 ? ProgramConstants.DOCGENERALFILE: ProgramConstants.PLATAFORMAS
+                    + ProgramConstants.DOCRESULTEXT;
+            crearArchivoWord(getImagenes(), call + ProgramConstants.PLATAFORMAS,
+                    456,228, ProgramConstants.DOCGENERALFILE);
+            count = 1;
+            ie.createExcelDocument(tableData, 9, "documentacion_tablas.xlsx",1);
+            finalizandoProceso();
+        };
         
-        runFlujoWebUssd();
-        crearArchivoWord(getImagenes(), ProgramConstants.EXCELSHEETNAME,
-                456,228, ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT);
-        SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", 
-                BaseClass.getInstance().getNumeroGenerado());
-        ie.createExcelDocument(tableData, 9, "ESTE_ES_EL_EXCEL.xlsx",1);
-        finalizandoProceso();
     }
     
-    private void runFlujoWebUssd(){
+    private void runFlujoWebUssd(ArrayList<String> st){
         rw.driverStart("Chrome", flujoActual);
-        cpList.forEach((cpTemp)->{
+        
+        for(int i=0; i<cpList.size(); i++){
+            CP cpTemp = cpList.get(i);   
+            
+            if(cpTemp.getLink().contains("epos.sv.tigo.com:8080") && st.get(2).trim().toLowerCase().equals("directa")){
+                
+                i = i+1;
+                cpTemp = cpList.get(i);
+            }
             rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
             cpTemp.getPasos().forEach((pasosTemp)->{
                 
@@ -196,7 +215,12 @@ public class Manager extends Thread{
                 }
                 
             });
-        });
+            if(cpTemp.getLink().contains("epos.sv.tigo.com:8080") && st.get(2).trim().toLowerCase().equals("indirecta")){
+                
+                i = 500;
+                //cpTemp = cpList.get(i);
+            }
+        }
     }
     
     private void finalizandoProceso(){
@@ -298,5 +322,13 @@ public class Manager extends Thread{
 
     public void setCredencialesGuardadas(Map credencialesGuardadas) {
         this.credencialesGuardadas = credencialesGuardadas;
+    }
+
+    public Map<String, ArrayList<String>> getDatosExcel() {
+        return datosExcel;
+    }
+
+    public void setDatosExcel(Map<String, ArrayList<String>> datosExcel) {
+        this.datosExcel = datosExcel;
     }
 }

@@ -125,12 +125,41 @@ public class ViewManager{
         mainPanel.setVisible(true);
     }
     
+    public void showFlujosQA(String key){
+        
+        showMainTitle("Flujos QA");
+        
+        mainPanel.validate();
+        mainPanel.repaint();
+        mainPanel.setVisible(true);
+    }
+    
     public void showBtnContinuar(){
         JbuttonProgram btn = new JbuttonProgram(ProgramConstants.BTNCONTINUAR);
             btn.generalFormat();
             btn.addMouseListener(new ActionBtn(ProgramConstants.BTNCONTINUAR));
             mainPanel.add(btn);
             btn.setBounds((int)(mainPanel.getWidth()/2) - (int)(ProgramConstants.BTNWIDTH/2),
+                    (mainPanel.getHeight() - ProgramConstants.BTNHEIGHT - ProgramConstants.BTNSTARTX), 
+                    ProgramConstants.BTNWIDTH, ProgramConstants.BTNHEIGHT);
+    }
+    
+    public void showBtnSoloUssd(){
+        JbuttonProgram btn = new JbuttonProgram(ProgramConstants.BTNSOLOUSSD);
+            btn.generalFormat();
+            btn.addMouseListener(new ActionBtn(ProgramConstants.BTNSOLOUSSD));
+            mainPanel.add(btn);
+            btn.setBounds((int)(mainPanel.getWidth()/8) - (int)(ProgramConstants.BTNWIDTH/2),
+                    (mainPanel.getHeight() - ProgramConstants.BTNHEIGHT - ProgramConstants.BTNSTARTX), 
+                    ProgramConstants.BTNWIDTH, ProgramConstants.BTNHEIGHT);
+    }
+    
+    public void showBtnSoloPlataforma(){
+        JbuttonProgram btn = new JbuttonProgram(ProgramConstants.BTNSOLOPLATAFORMA);
+            btn.generalFormat();
+            btn.addMouseListener(new ActionBtn(ProgramConstants.BTNSOLOPLATAFORMA));
+            mainPanel.add(btn);
+            btn.setBounds((int)((mainPanel.getWidth()/3)) - (int)(ProgramConstants.BTNWIDTH/2),
                     (mainPanel.getHeight() - ProgramConstants.BTNHEIGHT - ProgramConstants.BTNSTARTX), 
                     ProgramConstants.BTNWIDTH, ProgramConstants.BTNHEIGHT);
     }

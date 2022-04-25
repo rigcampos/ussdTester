@@ -13,11 +13,13 @@ import com.testinium.deviceinformation.exception.DeviceNotFoundException;
 import com.testinium.deviceinformation.model.Device;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 import io.appium.java_client.service.local.AppiumServiceBuilder;
 import io.appium.java_client.service.local.flags.GeneralServerFlag;
+import io.appium.java_client.touch.offset.PointOption;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -87,7 +89,7 @@ public class BaseClass {
     public void beforeTest(){
         
         try{
-            imagenes = new ArrayList<String>();
+            //imagenes = new ArrayList<String>();
              DeviceInfo deviceInfo = new DeviceInfoImpl(DeviceType.ANDROID);
             if (deviceInfo.anyDeviceConnected()) {
                 Device device = deviceInfo.getFirstDevice();
@@ -97,7 +99,8 @@ public class BaseClass {
                 driver = new AndroidDriver<>(url,caps);
                 
                 fluentWaitDriver();
-                findNumeros();
+                //swipeElement();
+                
             }
             
         }catch(DeviceNotFoundException | IOException e){
@@ -139,27 +142,71 @@ public class BaseClass {
     }
     
     public void seguirFlujo(String call, String[] way) throws InterruptedException{
-        
+        imagenes = new ArrayList<String>();
         Thread.sleep(4000L);
         int fin  = way.length;
-        for(int i=0; i<way.length; i++){
-            
-            findElement(By.id(TestConstants.TEST_IFIELD)).sendKeys(way[i]);
-            Thread.sleep(1000L);
-            tomarScreenShot(i+ProgramConstants.DOCIMAGENAME);
-            findElement(By.id(TestConstants.TEST_BTNOK)).click();
-            Thread.sleep(2000L);      
+        try {
+            for(int i=0; i<way.length; i++){
+
+                findElement(By.id(TestConstants.TEST_IFIELD)).sendKeys(way[i]);
+                Thread.sleep(1000L);
+                tomarScreenShot(i+ProgramConstants.DOCIMAGENAME);
+                findElement(By.id(TestConstants.TEST_BTNOK)).click();
+                Thread.sleep(2000L);      
+            }
+        } catch (Exception e) {
         }
+        
         Thread.sleep(12000L);
+        Thread.sleep(2000L);
         tomarScreenShot(fin+ProgramConstants.DOCIMAGENAME);
         if(nuevo.equals("774")){
             guardarNumero();
         }
-        driver.findElement(By.id(TestConstants.TEST_BTNOK)).click();
+        findElement(By.id(TestConstants.TEST_BTNOK)).click();
     }
     
-    public void specialElement(){
+    public void swipeElement(int num){
         
+        for(int i =0; i<num; i++){
+            PointOption inicial = new PointOption();
+            inicial.withCoordinates(400,440);
+
+            PointOption fin = new PointOption();
+            fin.withCoordinates(27,440);
+
+            TouchAction ta = new TouchAction(driver); 
+            ta.press(inicial).moveTo(fin).release().perform();
+        }
+        aditionalControl();
+    }
+    
+    public void aceptAllPermision(){
+        MobileElement el1 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_done"));
+        el1.click();
+        MobileElement el2 = (MobileElement) findElement(By.id("com.android.permissioncontroller:id/permission_allow_button"));
+        el2.click();
+        el2.click();
+        el2.click();
+        el2.click();
+        el2.click();
+        el2.click();
+        MobileElement el3 = (MobileElement) findElement(By.id("android:id/button2"));
+        el3.click();
+        MobileElement el4 = (MobileElement) findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView[1]"));
+        el4.click();
+        MobileElement el5 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_phone_number"));
+        el5.click();
+        //android:id/button2
+    }
+    
+    public void aditionalControl(){
+        MobileElement el1 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_done"));
+        el1.click();
+        MobileElement el2 = (MobileElement) findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.View/android.widget.RelativeLayout/android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView[1]"));
+        el2.click();
+        MobileElement el3 = (MobileElement) findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.View/android.widget.RelativeLayout/androidx.viewpager.widget.ViewPager/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.RelativeLayout/android.widget.FrameLayout/android.widget.ListView/android.view.View[3]/android.widget.RelativeLayout/android.widget.LinearLayout[1]"));
+        el3.click();
     }
     
     public void tomarScreenShot(String name){
@@ -177,6 +224,7 @@ public class BaseClass {
     }
     
     public void marcarCodigo(String call) throws InterruptedException{
+        findNumeros();
         String[] st = call.split("");
         nuevo = "";
         for(int i = st.length-1; i>=st.length-3; i--){
@@ -195,9 +243,10 @@ public class BaseClass {
     
     public void guardarNumero(){
         String txt = findElement(By.id("android:id/message")).getText();
-        numeroGenerado = txt.split("DUI:")[1].split(",")[0].trim().replace("-", "");
+        numeroGenerado = txt.split("Telefono:")[1].split(",")[0].trim().replace("-", "");
+        
         Manager.getInstance().getUserVals().put("Numero generado"
-                            , "72020381"/*numeroGenerado*/);
+                            ,numeroGenerado);
     }
     
     private void allData(String code, String[] flujo){
