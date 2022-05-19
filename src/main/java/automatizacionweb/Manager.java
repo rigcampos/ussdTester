@@ -43,6 +43,9 @@ public class Manager extends Thread{
     private ArrayList<String> imagenes;
     private String startDate;
     private ArrayList<CP> cpList;
+    private ArrayList<CP> tigoMList;
+    private ArrayList<CP> TSBCBSList;
+    private ArrayList<CP> portabilidadList;
     private Map<String,ModelCredencial> credencialesPojo;
     private ArrayList<String> tableData;
     public static String instanceCamino = "";
@@ -52,7 +55,15 @@ public class Manager extends Thread{
     private Map<String,String> guardarSim;
     private Map<String,ArrayList<String>> datosExcel;
     private String call="";
+    private String ussdCT;
     private int[] flujoActive = new int[]{0,0,0}; 
+    private int inicio = 0;
+    private int terminar = 3;
+    private String linkSoap = ProgramConstants.PRODWEBSERV;
+    private String xmlDate1 ="";
+    private String xmlDate2 ="";
+    private boolean tn = false;
+    private String portFl;
 
     private Manager() {
         st= new StartDocument();
@@ -83,15 +94,37 @@ public class Manager extends Thread{
     }
     
     public void readDocument(){
-        st.readStartDocument();
+        st.readStartDocument(); // Lee un txt de flujo recursivo
         masterMap = st.getFlujos();
-        st.readCredencialDoc();
+        st.readCredencialDoc();// Lee las credenciales de las plataformas, flujo recursivo
         credencialesMap = st.getCredenciales();
-        st.readFlujoExcel();
+        readFlujoUssd();
+    }
+    
+    public void readFlujoUssd(){
+        st.readFlujoExcel();// Lee el excel del flujo USSD.
         st.readJson(TestConstants.JSON_NAME_USSD);
         st.readJson(TestConstants.JSON_NAME_CREDENCIALES);
         st.readJson(TestConstants.JSON_GUARDADO);
+        st.readJson(ProgramConstants.JSON_TIGO_MONEY);
+        st.readJson(ProgramConstants.JSON_TSB_CBS);
         cpList = st.getCpList();
+        tigoMList = st.getTigoMList();
+        TSBCBSList = st.getTSBCBSList();
+        credencialesPojo = st.getCredencialesPojo();
+    }
+    
+    public void readPortProcess(){
+        st.readJson(ProgramConstants.JSON_TIGO_PORTIN);
+        portabilidadList = st.getPortabilidaList();
+    }
+    
+    public void readFlujoUssdCT(){
+        st.readFlujoUSSDCT(ussdCT);// Lee el excel del flujo USSD.
+        //st.readJson(TestConstants.JSON_NAME_USSD);
+        //st.readJson(TestConstants.JSON_NAME_CREDENCIALES);
+        //st.readJson(TestConstants.JSON_GUARDADO);
+        //cpList = st.getCpList();
         credencialesPojo = st.getCredencialesPojo();
     }
     
@@ -109,7 +142,16 @@ public class Manager extends Thread{
                 processUSSD();
             }case ProgramConstants.BTNSOLOPLATAFORMA ->{
                 validacionesExternas();
+            }case ProgramConstants.MENUFLUJOSQA ->{
+                runFlujoTMYWeb();
+            }case ProgramConstants.MENUFLUJOSQAPORT ->{
+                runFlujoPortaWeb();
+            }case ProgramConstants.MENUFLUJOSQAPORTOUT ->{
+                runFlujoPortOUT();
+            }case ProgramConstants.BTNSOLOTSBCBS ->{
+                soloTsbCbs();
             }
+            
         }
     }
     
@@ -147,18 +189,30 @@ public class Manager extends Thread{
     
     public String getNowDate(){
         LocalDateTime now = LocalDateTime.now();
+        String cero = "0";
+        if(now.getMonthValue()>=10){cero = "";}
+        xmlDate1=""+now.getYear()+cero+now.getMonthValue()+""+now.getDayOfMonth()+"000000";
+        xmlDate2=""+now.getYear()+cero+now.getMonthValue()+""+now.getDayOfMonth()+"235959";
+        System.out.println(xmlDate1);
+        System.out.println(xmlDate2);
         return now.getDayOfMonth() +"/"+now.getMonthValue()+"/"+now.getYear();
     }
     
     public void processUSSD(){
         st.flujoUssd.forEach((k,v)->{
+            //return;
+            if(k.equals("") || k.length()<2){
+                return;
+            }
             numeroFlujo = numeroFlujo + 1;
             BaseClass.getInstance().beforeTest();
             call = k;
             String[] way = v.split(ProgramConstants.SEPARATORUSSD);
             
             try {
+                BaseClass.getInstance().swipeElement(3);
                 //BaseClass.getInstance().aceptAllPermision();
+                //if(!tn){BaseClass.getInstance().swipeElement(3);}
                 BaseClass.getInstance().marcarCodigo(call);
                 BaseClass.getInstance().seguirFlujo(call,way);
                 crearArchivoWord(BaseClass.getInstance().getImagenes(), call + ProgramConstants.EXCELSHEETNAME,
@@ -166,6 +220,7 @@ public class Manager extends Thread{
                 //actualDoc = ProgramConstants.EXCELSHEETNAME + ProgramConstants.DOCRESULTEXT;
                 
             } catch (InterruptedException ex) {
+                ViewManager.getInstance().infoBox("Error al abrir la Aplicacion en el movil");
             }finally{
                 
             }
@@ -178,10 +233,13 @@ public class Manager extends Thread{
             String k = entry.getKey();
             ArrayList<String> v = entry.getValue();
             call = k;
-            System.out.println(k);
             InExcelDocument ie = new InExcelDocument();
-            SoapConnection.getInstance().xmlResponse("http://192.168.128.41:8080/services/BcServices?wsdl", 
+            SoapConnection.getInstance().xmlResponse(linkSoap, 
                     v.get(4));
+            if(inicio == 3){
+                SoapConnection.getInstance().xmlQueryCDR(linkSoap, 
+                    v.get(4));
+            }
             runFlujoWebUssd(v);
             String temp = count == 0 ? ProgramConstants.DOCGENERALFILE: ProgramConstants.PLATAFORMAS
                     + ProgramConstants.DOCRESULTEXT;
@@ -197,17 +255,19 @@ public class Manager extends Thread{
     private void runFlujoWebUssd(ArrayList<String> st){
         rw.driverStart("Chrome", flujoActual);
         
-        for(int i=0; i<cpList.size(); i++){
+        for(int i=inicio; i<terminar; i++){
             CP cpTemp = cpList.get(i);   
             
-            if(cpTemp.getLink().contains("epos.sv.tigo.com:8080") && st.get(2).trim().toLowerCase().equals("directa")){
+            if((cpTemp.getLink().contains("epos.sv.tigo.com") || cpTemp.getLink().contains("tigo-pos-web")) && st.get(2).trim().toLowerCase().equals("directa")){
                 
                 i = i+1;
                 cpTemp = cpList.get(i);
             }
             rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
             cpTemp.getPasos().forEach((pasosTemp)->{
-                
+                if(rw.isDetenerFlujo()){
+                    return;
+                }
                 if(userVals.containsKey(pasosTemp.getInput())){
                     rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), userVals.get(pasosTemp.getInput()));
                 }else{
@@ -215,10 +275,141 @@ public class Manager extends Thread{
                 }
                 
             });
-            if(cpTemp.getLink().contains("epos.sv.tigo.com:8080") && st.get(2).trim().toLowerCase().equals("indirecta")){
+            if((cpTemp.getLink().contains("epos.sv.tigo.com") || cpTemp.getLink().contains("tigo-pos-web")) && st.get(2).trim().toLowerCase().equals("indirecta")){
                 
                 i = 500;
                 //cpTemp = cpList.get(i);
+            }
+            
+            if(rw.isDetenerFlujo()){
+                    return;
+            }
+        }
+    }
+    
+    private void runFlujoTMYWeb(){
+        rw.driverStart("Chrome", flujoActual);
+        
+        for(int i=0; i<tigoMList.size(); i++){
+            CP cpTemp = tigoMList.get(i);   
+            
+            
+            rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
+            cpTemp.getPasos().forEach((pasosTemp)->{
+                if(rw.isDetenerFlujo()){
+                    return;
+                }
+                if(userVals.containsKey(pasosTemp.getInput())){
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), userVals.get(pasosTemp.getInput()));
+                }else{
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), pasosTemp.getInput());
+                }
+                
+            });
+            
+            if(rw.isDetenerFlujo()){
+                    return;
+            }
+        }
+        crearArchivoWord(getImagenes(), call + ProgramConstants.PLATAFORMAS,
+                    456,228, ProgramConstants.DOCGENERALFILE);
+        finalizandoProceso();
+    }
+    
+    public void soloTsbCbs(){
+        int count = 0;
+        for(Map.Entry<String,ArrayList<String>> entry: datosExcel.entrySet()){
+            String k = entry.getKey();
+            ArrayList<String> v = entry.getValue();
+            call = k;
+            
+            //runFlujoWebUssd(v);
+            runFlujoTSBCBSWeb();
+            String temp = count == 0 ? ProgramConstants.DOCGENERALFILE: ProgramConstants.PLATAFORMAS
+                    + ProgramConstants.DOCRESULTEXT;
+            crearArchivoWord(getImagenes(), call + ProgramConstants.PLATAFORMAS,
+                    456,228, ProgramConstants.DOCGENERALFILE);
+            count = 1;
+            //ie.createExcelDocument(tableData, 9, "documentacion_tablas.xlsx",1);
+            //finalizandoProceso();
+        };
+        
+    }
+    
+    private void runFlujoTSBCBSWeb(){
+        rw.driverStart("Chrome", flujoActual);
+        
+        for(int i=0; i<1; i++){
+            CP cpTemp = TSBCBSList.get(i);   
+            
+            
+            rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
+            cpTemp.getPasos().forEach((pasosTemp)->{
+                if(rw.isDetenerFlujo()){
+                    return;
+                }
+                if(userVals.containsKey(pasosTemp.getInput())){
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), userVals.get(pasosTemp.getInput()));
+                }else{
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), pasosTemp.getInput());
+                }
+                
+            });
+            
+            if(rw.isDetenerFlujo()){
+                    return;
+            }
+        }
+        
+        finalizandoProceso();
+    }
+    
+    private void runFlujoPortaWeb(){
+        readPortProcess();
+        SoapConnection.getInstance().handleRequest("PORT IN");
+        rw.driverStart("Chrome", flujoActual);
+        cicloPorta();
+        finalizandoProceso();
+        SoapConnection.getInstance().handleRequest("REVERSA PORT IN");
+        rw.driverStart("Chrome", flujoActual);
+        cicloPorta();
+        finalizandoProceso();
+        crearArchivoWord(getImagenes(), call + ProgramConstants.PLATAFORMAS,
+                    456,228, ProgramConstants.DOCGENERALFILE);
+        
+    }
+    
+    private void runFlujoPortOUT(){
+        readPortProcess();
+        SoapConnection.getInstance().handleRequest("PORT OUT");
+        rw.driverStart("Chrome", flujoActual);
+        cicloPorta();
+        finalizandoProceso();
+        crearArchivoWord(getImagenes(), call + ProgramConstants.PLATAFORMAS,
+                    456,228, ProgramConstants.DOCGENERALFILE);
+        
+    }
+    
+    private void cicloPorta(){
+        for(int i=0; i<portabilidadList.size(); i++){
+            CP cpTemp = portabilidadList.get(i);   
+            
+            
+            rw.waitAction(ProgramConstants.ACTIONGOTO, "", "", cpTemp.getLink());
+            cpTemp.getPasos().forEach((pasosTemp)->{
+                if(rw.isDetenerFlujo()){
+                    return;
+                }
+                if(userVals.containsKey(pasosTemp.getInput())){
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), userVals.get(pasosTemp.getInput()));
+                }else{
+                    rw.waitAction(pasosTemp.getAccion(), pasosTemp.getLlave(), pasosTemp.getValor(), pasosTemp.getInput());
+                }
+                
+            });
+            
+            if(rw.isDetenerFlujo()){
+                    return;
             }
         }
     }
@@ -330,5 +521,65 @@ public class Manager extends Thread{
 
     public void setDatosExcel(Map<String, ArrayList<String>> datosExcel) {
         this.datosExcel = datosExcel;
+    }
+    
+    public void setInicio(int inicio){
+        this.inicio = inicio;
+    }
+    
+    public int getInicio(){
+        return this.inicio;
+    }
+    
+    public void setTerminar(int terminar){
+        this.terminar = terminar;
+    }
+    
+    public int getTerminar(){
+        return this.terminar;
+    }
+    
+    public void setLinkSoap(String linkSoap){
+        this.linkSoap = linkSoap;
+    }
+    
+    public String getLinkSoap(){
+        return this.linkSoap;
+    }
+    
+    public void setUssdCT(String ussdCT){
+        this.ussdCT = ussdCT;
+    }
+
+    public boolean isTn() {
+        return tn;
+    }
+
+    public void setTn(boolean tn) {
+        this.tn = tn;
+    }
+    
+    public void setPortFl(String portFl){
+        this.portFl = portFl;
+    }
+    
+    public String getPortFl(){
+        return portFl;
+    }
+
+    public String getXmlDate1() {
+        return xmlDate1;
+    }
+
+    public void setXmlDate1(String xmlDate1) {
+        this.xmlDate1 = xmlDate1;
+    }
+
+    public String getXmlDate2() {
+        return xmlDate2;
+    }
+
+    public void setXmlDate2(String xmlDate2) {
+        this.xmlDate2 = xmlDate2;
     }
 }

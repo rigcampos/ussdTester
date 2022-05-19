@@ -34,38 +34,32 @@ public class ActionBtn extends MouseAdapter{
                 for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
                     Manager.getInstance().getUserVals().put(credencial.getKeyText()
                             , credencial.getValText());
-                    //System.out.println(credencial.getKeyText());
-                    //System.out.println(credencial.getValText());
                 }
                 ViewManager.getInstance().minimizarMainW();
-                
+                //System.out.println(ViewManager.getInstance().getMenuSelected().getText());ProgramConstants.MENUFLUJOSQAPORT
                 Manager.getInstance(ViewManager.getInstance().getMenuSelected().getText()).start();
                 Manager.getInstance().saveDataCredencial();
                 
             }case ProgramConstants.BTNSOLOUSSD->{
+                Manager.getInstance().readFlujoUssd();
                 for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
                     Manager.getInstance().getUserVals().put(credencial.getKeyText()
                             , credencial.getValText());
-                    //System.out.println(credencial.getKeyText());
-                    //System.out.println(credencial.getValText());
                 }
                 ViewManager.getInstance().minimizarMainW();
                 if(!Manager.instanceCamino.equals("")){
-                    System.out.println("VAMOS A IR A LAGO?");
                     Manager.getInstance(ProgramConstants.BTNSOLOUSSD).run();
                 }else{
-                    System.out.println("VAMOS A IR A LAGO?????????");
                     Manager.getInstance(ProgramConstants.BTNSOLOUSSD).start();
                 }
                 
                 Manager.getInstance().saveDataCredencial();
                 
             }case ProgramConstants.BTNSOLOPLATAFORMA->{
+                Manager.getInstance().readFlujoUssd();
                 for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
                     Manager.getInstance().getUserVals().put(credencial.getKeyText()
                             , credencial.getValText());
-                    //System.out.println(credencial.getKeyText());
-                    //System.out.println(credencial.getValText());
                 }
                 ViewManager.getInstance().minimizarMainW();
                 if(!Manager.instanceCamino.equals("")){
@@ -75,13 +69,82 @@ public class ActionBtn extends MouseAdapter{
                 }
                 Manager.getInstance().saveDataCredencial();
                 
-            }
-            default ->{
+            }case ProgramConstants.BTNSOLOTSBCBS->{
+                Manager.getInstance().readFlujoUssd();
+                for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
+                    Manager.getInstance().getUserVals().put(credencial.getKeyText()
+                            , credencial.getValText());
+                }
+                ViewManager.getInstance().minimizarMainW();
+                if(!Manager.instanceCamino.equals("")){
+                    Manager.getInstance(ProgramConstants.BTNSOLOTSBCBS).run();
+                }else{
+                    Manager.getInstance(ProgramConstants.BTNSOLOTSBCBS).start();
+                }
+                Manager.getInstance().saveDataCredencial();
+                
+            }case ProgramConstants.BTNPLATAFORMAUAT->{
+                if(Manager.getInstance().getInicio() == 0){
+                    Manager.getInstance().setInicio(3);
+                    Manager.getInstance().setTerminar(6);
+                    Manager.getInstance().setLinkSoap(ProgramConstants.UATWEBSERV);
+                    //((javax.swing.JRadioButton)e.getComponent()).setSelected(true);
+                }else{
+                    Manager.getInstance().setInicio(0);
+                    Manager.getInstance().setTerminar(3);
+                    Manager.getInstance().setLinkSoap(ProgramConstants.PRODWEBSERV);
+                }
+                
+            }case ProgramConstants.BTNCTUSSD->{
+                ViewManager.getInstance().deleteAll();
+                ViewManager.getInstance().showFlujosQAUssd();
+            }case ProgramConstants.BTNREGRESIVAS->{
                 ViewManager.getInstance().deleteAll();
                 Manager.getInstance().setFlujoActual(ProgramConstants.STARTTITLE
                         +((JButton) e.getComponent()).getText());
                 ViewManager.getInstance().showCredenciales(((JButton) e.getComponent()).getText());
                 ViewManager.getInstance().showBtnContinuar();
+            }case ProgramConstants.BTNCTACTIONUSSD->{
+                Manager.getInstance().setUssdCT(((JButton) e.getComponent()).getText());
+                Manager.getInstance().readFlujoUssdCT();
+//                for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
+//                    Manager.getInstance().getUserVals().put(credencial.getKeyText()
+//                            , credencial.getValText());
+//                }
+                ViewManager.getInstance().minimizarMainW();
+                if(!Manager.instanceCamino.equals("")){
+                    Manager.getInstance(ProgramConstants.BTNSOLOUSSD).run();
+                }else{
+                    Manager.getInstance(ProgramConstants.BTNSOLOUSSD).start();
+                }
+                
+            }case ProgramConstants.BTNTIGOMONEY->{
+                ViewManager.getInstance().deleteAll();
+                ViewManager.getInstance().showCredencialTMY("");
+                ViewManager.getInstance().showBtnContinuar();
+                
+            }case ProgramConstants.BTNCTCREDENPORT->{
+                ViewManager.getInstance().deleteAll();
+                ViewManager.getInstance().showCredencialPorta("");
+                ViewManager.getInstance().showBtnContinuar("Continuar nuevo");
+                Manager.getInstance().setPortFl(((JButton) e.getComponent()).getText());
+                
+            }case ProgramConstants.BTNPORTABILIDAD->{
+                ViewManager.getInstance().deleteAll();
+                ViewManager.getInstance().showFlujosQAPorta();
+            }case "Continuar nuevo"->{
+                for(Credencial credencial : ViewManager.getInstance().getCredenciales()){
+                    Manager.getInstance().getUserVals().put(credencial.getKeyText()
+                            , credencial.getValText());
+                }
+                ViewManager.getInstance().minimizarMainW();
+                //System.out.println(ViewManager.getInstance().getMenuSelected().getText());ProgramConstants.MENUFLUJOSQAPORT
+                Manager.getInstance(Manager.getInstance().getPortFl()).start();
+                Manager.getInstance().saveDataCredencial();
+            }
+            default ->{
+                System.out.println("BOTON SIN ASIGNAR");
+
             }
                 
         }

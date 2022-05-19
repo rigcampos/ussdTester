@@ -4,6 +4,7 @@
  */
 package com.tigosv.ussdtester.test;
 
+import JViews.ViewManager;
 import automatizacionweb.Manager;
 import automatizacionweb.ProgramConstants;
 import com.testinium.deviceinformation.DeviceInfo;
@@ -126,35 +127,39 @@ public class BaseClass {
     }
     
     private void findNumeros(){
-        numbers.put("*",findElement(By.id(TestConstants.USSDSTAR)));
-        numbers.put("1",findElement(By.id(TestConstants.USSDONE)));
-        numbers.put("2",findElement(By.id(TestConstants.USSDTWO)));
-        numbers.put("3",findElement(By.id(TestConstants.USSDTHREE)));
-        numbers.put("4",findElement(By.id(TestConstants.USSDFOUR)));
-        numbers.put("5",findElement(By.id(TestConstants.USSDFIVE)));
-        numbers.put("6",findElement(By.id(TestConstants.USSDSIX)));
-        numbers.put("7",findElement(By.id(TestConstants.USSDSEVEN)));
-        numbers.put("8",findElement(By.id(TestConstants.USSDEIGHT)));
-        numbers.put("9",findElement(By.id(TestConstants.USSDNINE)));
-        numbers.put("0",findElement(By.id(TestConstants.USSDZERO)));
-        numbers.put("#",findElement(By.id(TestConstants.USSDNUM)));
-        numbers.put("call",findElement(By.id(TestConstants.USSDSEND)));
+        try {
+            numbers.put("*",findElement(By.id(TestConstants.USSDSTAR)));
+            numbers.put("1",findElement(By.id(TestConstants.USSDONE)));
+            numbers.put("2",findElement(By.id(TestConstants.USSDTWO)));
+            numbers.put("3",findElement(By.id(TestConstants.USSDTHREE)));
+            numbers.put("4",findElement(By.id(TestConstants.USSDFOUR)));
+            numbers.put("5",findElement(By.id(TestConstants.USSDFIVE)));
+            numbers.put("6",findElement(By.id(TestConstants.USSDSIX)));
+            numbers.put("7",findElement(By.id(TestConstants.USSDSEVEN)));
+            numbers.put("8",findElement(By.id(TestConstants.USSDEIGHT)));
+            numbers.put("9",findElement(By.id(TestConstants.USSDNINE)));
+            numbers.put("0",findElement(By.id(TestConstants.USSDZERO)));
+            numbers.put("#",findElement(By.id(TestConstants.USSDNUM)));
+            numbers.put("call",findElement(By.id(TestConstants.USSDSEND)));
+        } catch (Exception e) {
+            ViewManager.getInstance().infoBox("Error en detectar el teclado del movil");
+        }
     }
     
     public void seguirFlujo(String call, String[] way) throws InterruptedException{
         imagenes = new ArrayList<String>();
         Thread.sleep(4000L);
         int fin  = way.length;
-        try {
-            for(int i=0; i<way.length; i++){
-
+        for(int i=0; i<way.length; i++){
+            try {
                 findElement(By.id(TestConstants.TEST_IFIELD)).sendKeys(way[i]);
                 Thread.sleep(1000L);
                 tomarScreenShot(i+ProgramConstants.DOCIMAGENAME);
                 findElement(By.id(TestConstants.TEST_BTNOK)).click();
-                Thread.sleep(2000L);      
-            }
-        } catch (Exception e) {
+                Thread.sleep(2000L);
+            } catch (Exception e) {
+                ViewManager.getInstance().infoBox("Error en el menu, Excel");
+            }  
         }
         
         Thread.sleep(12000L);
@@ -163,40 +168,55 @@ public class BaseClass {
         if(nuevo.equals("774")){
             guardarNumero();
         }
-        findElement(By.id(TestConstants.TEST_BTNOK)).click();
+        try {
+            findElement(By.id(TestConstants.TEST_BTNOK)).click();
+        } catch (Exception e) {
+        }
+        
     }
     
     public void swipeElement(int num){
         
         for(int i =0; i<num; i++){
-            PointOption inicial = new PointOption();
-            inicial.withCoordinates(400,440);
+            try {
+                PointOption inicial = new PointOption();
+                inicial.withCoordinates(400,440);
 
-            PointOption fin = new PointOption();
-            fin.withCoordinates(27,440);
+                PointOption fin = new PointOption();
+                fin.withCoordinates(27,440);
 
-            TouchAction ta = new TouchAction(driver); 
-            ta.press(inicial).moveTo(fin).release().perform();
+                TouchAction ta = new TouchAction(driver); 
+                ta.press(inicial).moveTo(fin).release().perform();
+            } catch (Exception e) {
+                
+            }
+            
         }
         aditionalControl();
     }
     
     public void aceptAllPermision(){
-        MobileElement el1 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_done"));
-        el1.click();
-        MobileElement el2 = (MobileElement) findElement(By.id("com.android.permissioncontroller:id/permission_allow_button"));
-        el2.click();
-        el2.click();
-        el2.click();
-        el2.click();
-        el2.click();
-        el2.click();
-        MobileElement el3 = (MobileElement) findElement(By.id("android:id/button2"));
-        el3.click();
-        MobileElement el4 = (MobileElement) findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView[1]"));
-        el4.click();
-        MobileElement el5 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_phone_number"));
-        el5.click();
+        try {
+            MobileElement el1 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_done"));
+            el1.click();
+            MobileElement el2 = (MobileElement) findElement(By.id("com.android.permissioncontroller:id/permission_allow_button"));
+            el2.click();
+            el2.click();
+            el2.click();
+            el2.click();
+            el2.click();
+            el2.click();
+            MobileElement el3 = (MobileElement) findElement(By.id("android:id/button2"));
+            el3.click();
+            MobileElement el4 = (MobileElement) findElement(By.xpath("/hierarchy/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/android.widget.LinearLayout/android.widget.FrameLayout/androidx.drawerlayout.widget.DrawerLayout/android.view.ViewGroup/android.widget.RelativeLayout/android.widget.HorizontalScrollView/android.widget.LinearLayout/android.widget.TextView[1]"));
+            el4.click();
+            MobileElement el5 = (MobileElement) findElement(By.id("v.d.d.answercall:id/btn_phone_number"));
+            el5.click(); 
+            Manager.getInstance().setTn(true);
+        } catch (Exception e) {
+        
+        }
+            
         //android:id/button2
     }
     
@@ -228,17 +248,23 @@ public class BaseClass {
         String[] st = call.split("");
         nuevo = "";
         for(int i = st.length-1; i>=st.length-3; i--){
-            System.out.println(st[i]);
             nuevo = st[i] + nuevo;
         }
-        numbers.get("*").click();
-        for(int i = 0; i<nuevo.split("").length; i++){
-            System.out.println(nuevo.split("")[i]);
-            numbers.get(nuevo.split("")[i]).click();
+        try {
+            numbers.get("*").click();
+            for(int i = 0; i<nuevo.split("").length; i++){
+                try {
+                    numbers.get(nuevo.split("")[i]).click();
+                } catch (Exception e) {
+
+                }
+
+            }
+            numbers.get("#").click();
+            Thread.sleep(1000L);
+            numbers.get("call").click();
+        } catch (Exception e) {
         }
-        numbers.get("#").click();
-        Thread.sleep(1000L);
-        numbers.get("call").click();
     }
     
     public void guardarNumero(){
@@ -261,25 +287,5 @@ public class BaseClass {
     public String getNumeroGenerado(){
         return this.numeroGenerado;
     }
-    
-//    public void startServer() {
-//        Runtime runtime = Runtime.getRuntime();
-//        try {
-//            runtime.exec("cmd.exe /c start cmd.exe /k \"appium -a 127.0.0.1 -p 4723 --session-override -dc \"{\"\"noReset\"\": \"\"false\"\"}\"\"");
-//            Thread.sleep(10000);
-//        } catch (IOException | InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    
-//    public void stopServer() {
-//        Runtime runtime = Runtime.getRuntime();
-//        try {
-//            runtime.exec("taskkill /F /IM node.exe");
-//            runtime.exec("taskkill /F /IM cmd.exe");
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
     
 }

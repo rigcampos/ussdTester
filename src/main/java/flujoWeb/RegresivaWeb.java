@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.UnreachableBrowserException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import static org.openqa.selenium.support.ui.ExpectedConditions.numberOfWindowsToBe;
 import org.openqa.selenium.support.ui.FluentWait;
@@ -50,6 +52,8 @@ public class RegresivaWeb {
     private int num = 0;
     private ArrayList<String> imagenes;
     private String currentAtr;
+    private boolean detenerFlujo = false;
+    private String masterCod;
 
     public RegresivaWeb() {
         dfactory = new InDriverFactory();     
@@ -137,7 +141,7 @@ public class RegresivaWeb {
     }
     
     private By byParameter(String key,String atr){
-        System.out.println(atr);
+        
         switch(key){
             case ProgramConstants.BYID -> {
                 return By.id(atr);
@@ -149,6 +153,8 @@ public class RegresivaWeb {
                 return By.className(atr);
             }case ProgramConstants.BYXPATH -> {
                 return By.xpath(atr);
+            }case "xpaths" -> {
+                return By.xpath(atr);
             }
             default -> {return null;}
         } 
@@ -157,17 +163,28 @@ public class RegresivaWeb {
     public Boolean waitAction(String act,String key, String atr , String val){
         currentAtr = atr;
         try {
-            WebElement element = findElement(byParameter(key, atr));
+            WebElement element;
+            if(key.equals("xpaths")){
+                element = getLastElementeList(byParameter(key, atr));
+            }else{
+                element = findElement(byParameter(key, atr));
+            }
+            //WebElement element = findElement(byParameter(key, atr));
             return driverWait.until(new Function<WebDriver, Boolean>() {
                 public Boolean apply(WebDriver driver) {
                     return doAction( act, element, val);
                 }
             });
         } catch (Exception e) {
-            System.out.println("No se pudo realizar la accion dos");
-            //System.out.println("Mensaje: " + e.getMessage());
-            //System.out.println("Causa: " + e.getCause());
-            //e.printStackTrace();
+            
+            if(e.getLocalizedMessage().contains("chrome not reachable") || 
+                    e.toString().contains("org.openqa.selenium.WebDriverException: chrome not reachable")){
+                    
+                    detenerFlujo = true;
+                    ViewManager.getInstance().infoBox("No se encontro el navegador.");
+                    
+            }
+            
             if(act.equals("45") && atr.equals("form1:tablaSeriales:11:nSeriales")){
                 doAction( "45", null, val);
             }
@@ -175,6 +192,21 @@ public class RegresivaWeb {
             
         }finally{
         }
+    }
+    
+    private WebElement getLastElementeList(By parameter){
+        if(parameter == null) return null;
+        WebElement element;
+        //List<WebElement> t  = driver.findElements(parameter);
+        
+        List<WebElement> elements = driverWait.until(new Function<WebDriver, List<WebElement>>() {
+            public List<WebElement> apply(WebDriver driver) {
+              return driver.findElements(parameter);
+            }
+        });
+        System.out.println(elements);
+        element = elements.get(elements.size()-1);
+        return element;
     }
     
     private Boolean doAction(String act, WebElement element, String val){
@@ -190,6 +222,8 @@ public class RegresivaWeb {
                 case ProgramConstants.ACTIONGOTO ->{
                     if(val.equals("user.dir")){
                         val = System.getProperty("user.dir") + "/" + ProgramConstants.USSDNAME;
+                    }if(val.equals("user.diruat")){
+                        val = System.getProperty("user.dir") + "/" + "QueryCDR.xml";
                     }
                     driver.navigate().to(val);
                 }
@@ -258,7 +292,24 @@ public class RegresivaWeb {
                     element.clear();
                 }case ProgramConstants.ACTIONIE->{
                     iwd.driverQuit();
-                    driverStart("IE","");
+                    driverStart("IE","");//(//span[contains(text(),'TIGO') and not(contains(text(),'MONEY'))])[1]
+                }case "30"->{
+                    //iwd.driverQuit();
+                    //driverStart("IE","");//(//span[contains(text(),'TIGO') and not(contains(text(),'MONEY'))])[1]
+                    String w = (String)driver.getWindowHandles().toArray()[1];
+                    driver.switchTo().window(w);
+                }case "31"->{
+                    String codigo = element.getText().trim();
+                    codigo = codigo.split(" ")[7].substring(0,6);
+                    System.out.println(codigo);
+                    masterCod = codigo;
+                }case "32"->{
+                    element.sendKeys(masterCod);
+                }case "33"->{
+                    String codigo = element.getText().trim();
+                    codigo = codigo.substring(0,6);
+                    System.out.println(codigo);
+                    masterCod = codigo;
                 }case "45"->{
                     for(int i = 0; i<10; i++){
                         try {
@@ -270,10 +321,10 @@ public class RegresivaWeb {
                             String temp = i >= 1 ? "(//*[@class=' dr-dscr-button rich-datascr-button'])[4]" : "(//*[@class=' dr-dscr-button rich-datascr-button'])[2]";
                             waitAction("1","xpath", temp , "");
                         } catch (Exception e) {
-                            System.out.println("NO ENCONTRAMOS NADA");
+                            
                         }
                     }
-                    System.out.println("estamos en 45");
+                    
                 }
             }
             return true;
@@ -296,5 +347,13 @@ public class RegresivaWeb {
     public void pilas(){
         waitAction("3", "0","0", "https://www.google.com/?hl=es");
         waitAction("2", "name","q", "prueba terminada con exiito");
+    }
+
+    public boolean isDetenerFlujo() {
+        return detenerFlujo;
+    }
+
+    public void setDetenerFlujo(boolean detenerFlujo) {
+        this.detenerFlujo = detenerFlujo;
     }
 }

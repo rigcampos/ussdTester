@@ -28,7 +28,6 @@ public class ModelCredencial {
         this.credenciales = new HashMap<>();
         JSONArray tempList = (JSONArray) c.get("credenciales");
         this.credenciales = ((JSONObject)tempList.get(0));
-        System.out.println(credenciales);
     }
 
     public String getTitulo() {

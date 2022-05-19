@@ -4,6 +4,7 @@
  */
 package automatizacionweb;
 
+import com.tigosv.ussdtester.test.TestConstants;
 import java.util.ArrayList;
 
 /**
@@ -67,7 +68,15 @@ public final class ProgramConstants {
     public static final String PLATAFORMFILE = "resources/plataformas.txt";
     public static final String BTNCONTINUAR = "Continuar";
     public static final String BTNSOLOUSSD = "USSD";
+    public static final String BTNTIGOMONEY = "Tigo Money";
     public static final String BTNSOLOPLATAFORMA = "Plataformas";
+    public static final String BTNSOLOTSBCBS = "TSB CBS";
+    public static final String BTNPLATAFORMAUAT = "UAT TEST";
+    public static final String BTNREGRESIVAS = "Regresivas";
+    public static final String BTNCTUSSD = "CT_USSD";
+    public static final String BTNCTACTIONUSSD = "activar_USSD";
+    public static final String BTNCTACTIONPORT = "activar_porta";
+    public static final String BTNCTCREDENPORT = "credenciales_porta";
     public static final String KEYPASS = "Password";
     public static final String KEYFECHA = "Fecha de expiracion";
     public static final String KEYCVV = "cvv de la tarjeta";
@@ -90,6 +99,8 @@ public final class ProgramConstants {
     public static final int CREDENHEIGHT = 32;
     public static final int CREDENEXTERSEPA = 16;
     public static final String EXCELPATH = "USSD.XLSX";
+    public static final String EXCELPATHUSSDCT = "necesarios/USSD_CT.XLSX";
+    public static final String EXCELPATHPORTA = "necesarios/PORTABILIDAD.XLSX";
     public static final String EXCELSHEETNAME = "USSDGENERICO";
     public static final int EXCELSTART = 1;
     public static final int EXCELCOLUMN = 2;
@@ -99,5 +110,16 @@ public final class ProgramConstants {
     public static final String MENURECURSIVA = "Regresivas";
     public static final String MENUUSSD = "USSD";
     public static final String MENUFLUJOSQA = "Flujos QA";
+    public static final String CODACTIVADORREMOTO = "774";
     public static final String[] NEVERSAVE = {/*"pass","contra","credi","tarjeta","cvv"*/};
+    public static final String UATWEBSERV="http://192.168.119.132:8080/services/BcServices?wsdl";
+    public static final String PRODWEBSERV="http://192.168.128.41:8080/services/BcServices?wsdl";
+    public static final String JSON_TIGO_MONEY = "tmy_web.json";
+    public static final String JSON_TIGO_PORTIN = "portabilidad_portin.json";
+    public static final String FLUJO_TIGO_MONEY = "tmy_flujo";
+    public static final String FLUJO_TIGO_PORTA = "porta_flujo";
+    public static final String BTNPORTABILIDAD = "Portabilidad";
+    public static final String MENUFLUJOSQAPORT = "PORTIN";
+    public static final String MENUFLUJOSQAPORTOUT = "PORTOUT";
+    public static final String JSON_TSB_CBS = "TSBCBS.json";
 }

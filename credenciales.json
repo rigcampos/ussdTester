@@ -1,0 +1,35 @@
+[{
+	"flujo":{
+		"titulo":"Flujo USSD",
+		"credenciales":[{
+			"Correo de red":"","Usuario de red":"","Dominio":"","Password de red":"","Numero generado":"","Usuario de Epos":"","Password de Epos":""
+		}]
+	},
+	"tmy_flujo":{
+		"titulo":"Flujo TMY web",
+		"credenciales":[{
+			"Numero de telefono":"",
+			"Numero recibir dinero":"",
+			"Numero pago factura":"",
+			"Numero pago AES":"",
+			"Numero pago DELSUR":"",
+			"Numero pago BELCORP":"",
+			"Numero pago ARABELA":"",
+			"codigo 1":"",
+			"codigo 2":"",
+			"codigo 3":"",
+			"codigo 4":""
+			
+		}]
+	},
+	"porta_flujo":{
+		"titulo":"Flujo Porta web",
+		"credenciales":[{
+			"Correo de red":"",
+			"Usuario de red":"",
+			"Dominio":"",
+			"Password de red":""			
+			
+		}]
+	}
+}]
